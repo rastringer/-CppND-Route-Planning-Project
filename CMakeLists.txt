@@ -1,13 +1,6 @@
 cmake_minimum_required(VERSION 3.0.0)
 set(CMAKE_CXX_STANDARD 17)
 
-find_package(Boost 1.67.0 QUIET COMPONENTS system date_time)
-
-if( NOT Boost_FOUND )
-    message( "Skipping the Maps example since Boost was not found" )
-    return()
-endif()
-
 find_package(OpenSSL QUIET)
 if( NOT OPENSSL_FOUND )
     message( "Skipping the Maps example since OpenSSL was not found" )
