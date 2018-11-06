@@ -27,8 +27,6 @@ add_executable(${PROJECT_ID}
     model.h
     render.cpp
     render.h
-    http.cpp
-    http.h
     a_search.cpp
     a_search.h
 )
