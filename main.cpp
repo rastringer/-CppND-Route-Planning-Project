@@ -30,7 +30,7 @@ static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
 int main(int argc, const char **argv)
 {    
     std::string osm_bounding_box = "";
-    std::string osm_data_file = "east.osm";
+    std::string osm_data_file = "map.osm";
     if( argc > 1 ) {
         for( int i = 1; i < argc; ++i )
             if( std::string_view{argv[i]} == "-b" && ++i < argc )
@@ -56,9 +56,11 @@ int main(int argc, const char **argv)
             osm_data = std::move(*data);
     }
     
-    Model model{osm_data};
+    Model model{osm_data};  
     Search search{model};
     Render render{model};
+
+    
     auto display = io2d::output_surface{400, 400, io2d::format::argb32, io2d::scaling::none, io2d::refresh_style::fixed, 30};
     display.size_change_callback([](io2d::output_surface& surface){
         surface.dimensions(surface.display_dimensions());

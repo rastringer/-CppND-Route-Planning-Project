@@ -6,21 +6,16 @@
 Search::Search(Model &model ):
     m_Model(model)
 {
+    /*Set start and end points*/
+    end = m_Model.m_Nodes[m_Model.m_Ways[2].nodes[0]];
     
-    int pos_Node_start = m_Model.m_Ways[0].nodes[0];
-    m_Model.pos_Node_start = pos_Node_start;
+    Calculate_H_Value(end);
+    start = m_Model.m_Nodes[m_Model.m_Ways[0].nodes[0]];
 
-    m_Model.start_position = m_Model.m_Nodes[pos_Node_start];
+    m_Model.start_position = start;
+    m_Model.end_position = end;
 
-
-    int pos_Node_end = m_Model.m_Ways[1].nodes[0];
-    m_Model.pos_Node_end = pos_Node_end;
-    m_Model.end_position = m_Model.m_Nodes[pos_Node_end];
-    
-
-    start = m_Model.start_position;
-    end = m_Model.end_position;
-
+    //Call A* algorithm
     A_Star();
 
 
@@ -28,13 +23,25 @@ Search::Search(Model &model ):
 
 bool Search::A_Star(){
 
-    std::vector<int>open;
-    open.emplace_back(m_Model.pos_Node_start);
+    /*
+    TODO:
+    2. Initialize a empty vector, for the open nodes
+    x. Insert into the open list of nodes, the start point
+    3. Initilize the g value.
+    1. Calculate the h value for all the nodes.
+    x. As long as there is nodes in the open list, keep looking at the nodes
+    x. Call a function that give you the best next node to move 
+    x. Add it to the path.
+    x. Check if the current node is the goal, if it is then return true.
+    x. If the current node is not the goal, then look for its neighbor.
+    x. Push the nodes into the open list of nodes.
+    x. Increment the g value.
+    x. If you ran out of nodes without findind a path, then there is no path.
+    */
 
-    Calculate_H_Value(end);
+    std::vector<Model::Node>open;
+    open.emplace_back(start);
     float g_value = 0.0;
-
-
     while (open.size() > 0)
     {
         Model::Node current_node = Next_Node(open, g_value);
@@ -45,14 +52,14 @@ bool Search::A_Star(){
             return true;
         }
         
-        std::vector<int> neighbors = Find_Neighbors(current_node);
+        std::vector<Model::Node> neighbors = Find_Neighbors(current_node);
         for (auto node : neighbors)
         {
             open.emplace_back(node);
         }
 
         g_value++;
-        std::string response;
+        
         
     }
     
@@ -63,18 +70,18 @@ bool Search::A_Star(){
 }
 
 
-Model::Node Search::Next_Node(std::vector<int>&neighbors, float gValue){
+Model::Node Search::Next_Node(std::vector<Model::Node>&open, float gValue){
     float lowest_fvalue = std::numeric_limits<float>::max();
     int next_node_pos;
     int counter = 0;
     int temp = 0;
-    for(int node : neighbors  ){
+    for(Model::Node &node : open  ){
         counter++;
-        float fvalue =  m_Model.m_Nodes[node].h_value + gValue ;
-        // if (!m_Model.m_Nodes[node].visited){
+        float fvalue =  node.h_value + gValue ;
+        if (!node.visited){
             if (fvalue<lowest_fvalue){
                 lowest_fvalue = fvalue ;
-                next_node_pos = node;
+                next_node_pos = node.index;
                 temp = counter;
             }
             else
@@ -82,16 +89,16 @@ Model::Node Search::Next_Node(std::vector<int>&neighbors, float gValue){
                 next_node_pos = next_node_pos;
                 temp = temp;
             }
-        // }
+        }
 
     }
-    if (neighbors.size() == 1)
+    if (open.size() == 1)
     {
-        neighbors.pop_back();
+        open.pop_back();
     }
     else
     {
-        neighbors.erase(neighbors.begin()+temp-1);
+        open.erase(open.begin()+temp-1);
     }
     m_Model.next_position = m_Model.m_Nodes[next_node_pos];
 
@@ -100,26 +107,30 @@ Model::Node Search::Next_Node(std::vector<int>&neighbors, float gValue){
 
 }
 
+
 void Search::Calculate_H_Value(Model::Node end) 
 {
     float h_value;
     for(auto &node: m_Model.m_Nodes) {
         h_value = std::sqrt(std::pow((end.x - node.x),2)+ std::pow((end.y - node.y),2));
-        node.h_value = h_value;         
+        node.h_value = h_value;     
 
     }
 }
 
-std::vector<int> Search::Find_Neighbors(Model::Node currentPosition)
+
+std::vector<Model::Node > Search::Find_Neighbors(Model::Node currentPosition)
 {
-    std::vector<int> neighbors;
+    std::vector<Model::Node > neighbors;
+    m_Model.neighbors = {};
     
     for(auto way_num : currentPosition.way_num)
     {
         auto way =m_Model.Ways()[way_num];
 
         if( way.type_highway == "primary" || way.type_highway == "secondary"
-             || way.type_highway == "service" || way.type_highway == "residential" ){
+             || way.type_highway == "service" || way.type_highway == "residential"
+             || way.type_highway == "tertiary" ){
             for(int i=0; i<m_Model.Ways()[way_num].id_nodes.size(); i++)
             {
                 int node_index = m_Model.Ways()[way_num].nodes[i];
@@ -127,7 +138,8 @@ std::vector<int> Search::Find_Neighbors(Model::Node currentPosition)
                 if (node_id != currentPosition.id)
                 { 
                     if (!m_Model.m_Nodes[node_index].visited){
-                        neighbors.emplace_back(node_index);
+                        neighbors.emplace_back(m_Model.m_Nodes[node_index]);
+                        m_Model.neighbors.emplace_back(node_index);
                     }
                 }
             }

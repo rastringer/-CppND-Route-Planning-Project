@@ -51,7 +51,7 @@ void Render::DrawNeighbors(io2d::output_surface &surface, std::vector<int> neigh
     for (auto index : neighbors )
     {
         io2d::render_props aliased{ io2d::antialias::none };
-        io2d::brush foreBrush{ io2d::rgba_color::red };
+        io2d::brush foreBrush{ io2d::rgba_color::white };
 
         auto pb = io2d::path_builder{}; 
         pb.matrix(m_Matrix);
@@ -323,12 +323,12 @@ void Render::BuildLanduseBrushes()
 static float RoadMetricWidth(Model::Road::Type type)
 {
     switch( type ) {
-        case Model::Road::Motorway:     return 6.f;
-        case Model::Road::Trunk:        return 6.f;
-        case Model::Road::Primary:      return 5.f;
-        case Model::Road::Secondary:    return 5.f;    
-        case Model::Road::Tertiary:     return 4.f;
-        case Model::Road::Residential:  return 2.5f;
+        case Model::Road::Motorway:     return 1.f;
+        case Model::Road::Trunk:        return 1.f;
+        case Model::Road::Primary:      return 1.f;
+        case Model::Road::Secondary:    return 1.f;    
+        case Model::Road::Tertiary:     return 1.f;
+        case Model::Road::Residential:  return 1.f;
         case Model::Road::Unclassified: return 2.5f;            
         case Model::Road::Service:      return 1.f;
         case Model::Road::Footway:      return 0.f;
@@ -342,8 +342,8 @@ static io2d::rgba_color RoadColor(Model::Road::Type type)
         case Model::Road::Motorway:     return io2d::rgba_color{226, 122, 143};
         case Model::Road::Trunk:        return io2d::rgba_color{245, 161, 136};
         case Model::Road::Primary:      return io2d::rgba_color{255, 0, 0};
-        case Model::Road::Secondary:    return io2d::rgba_color{0, 255, 0};    
-        case Model::Road::Tertiary:     return io2d::rgba_color{244, 251, 173};
+        case Model::Road::Secondary:    return io2d::rgba_color{255, 0, 255};    
+        case Model::Road::Tertiary:     return io2d::rgba_color{232, 65, 244};
         case Model::Road::Residential:  return io2d::rgba_color{0, 0, 0};
         case Model::Road::Service:      return io2d::rgba_color{0, 0, 255};
         case Model::Road::Footway:      return io2d::rgba_color{125, 125, 125};    

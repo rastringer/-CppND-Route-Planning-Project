@@ -48,7 +48,6 @@ Model::Model( const std::vector<std::byte> &xml )
     });
 
     Get_shared_nodes();
-
 }
 
 void Model::LoadData(const std::vector<std::byte> &xml)
@@ -76,6 +75,7 @@ void Model::LoadData(const std::vector<std::byte> &xml)
         m_Nodes.back().y = atof(node.node().attribute("lat").as_string());
         m_Nodes.back().x = atof(node.node().attribute("lon").as_string());
         m_Nodes.back().id = node.node().attribute("id").as_string();
+        m_Nodes.back().index = (int)m_Nodes.size()-1;
     }
 
 

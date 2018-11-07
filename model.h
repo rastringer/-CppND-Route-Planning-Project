@@ -16,6 +16,7 @@ public:
         float h_value = std::numeric_limits<float>::max();
         std::vector<int> way_num;
         bool visited = false;
+        int index;
     };
     
     struct Way {
