@@ -12,8 +12,9 @@ public:
     bool A_Star();
     void Calculate_H_Value(Model::Node end);
     void Sort_Nodes(std::vector<Model::Node> nodes);
+    float Calculate_distance(Model::Node current_node, Model::Node other_node);
     std::vector<Model::Node> Find_Neighbors(Model::Node currentPosition);
-    Model::Node Next_Node(std::vector<Model::Node>&open, float gValue);
+    Model::Node Next_Node(std::vector<Model::Node>&open, float gValue, Model::Node current_node);
 
     Model::Node start;
     Model::Node end;

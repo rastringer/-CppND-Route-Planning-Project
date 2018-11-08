@@ -30,7 +30,7 @@ static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
 int main(int argc, const char **argv)
 {    
     std::string osm_bounding_box = "";
-    std::string osm_data_file = "map.osm";
+    std::string osm_data_file = "mtv2.osm";
     if( argc > 1 ) {
         for( int i = 1; i < argc; ++i )
             if( std::string_view{argv[i]} == "-b" && ++i < argc )

@@ -7,7 +7,7 @@ Search::Search(Model &model ):
     m_Model(model)
 {
     /*Set start and end points*/
-    end = m_Model.m_Nodes[m_Model.m_Ways[2].nodes[0]];
+    end = m_Model.m_Nodes[m_Model.m_Ways[5].nodes[0]];
     
     Calculate_H_Value(end);
     start = m_Model.m_Nodes[m_Model.m_Ways[0].nodes[0]];
@@ -41,10 +41,13 @@ bool Search::A_Star(){
 
     std::vector<Model::Node>open;
     open.emplace_back(start);
+    Model::Node current_node = open.back();
     float g_value = 0.0;
-    while (open.size() > 0)
+    float stop = 200.0;
+    while(open.size() > 0 && g_value< stop)
+    // while (open.size() > 0)
     {
-        Model::Node current_node = Next_Node(open, g_value);
+        current_node = Next_Node(open, g_value, current_node);
         m_Model.path.emplace_back(current_node);
         if(current_node.x == end.x && current_node.y == end.y ) 
         {
@@ -70,14 +73,20 @@ bool Search::A_Star(){
 }
 
 
-Model::Node Search::Next_Node(std::vector<Model::Node>&open, float gValue){
+float Search::Calculate_distance(Model::Node current_node, Model::Node other_node){
+    return std::sqrt(std::pow((current_node.x - other_node.x),2)+ std::pow((current_node.y - other_node.y),2));
+}
+
+Model::Node Search::Next_Node(std::vector<Model::Node>&open, float gValue, Model::Node current_node){
     float lowest_fvalue = std::numeric_limits<float>::max();
     int next_node_pos;
     int counter = 0;
     int temp = 0;
     for(Model::Node &node : open  ){
         counter++;
-        float fvalue =  node.h_value + gValue ;
+        float distance = Calculate_distance(current_node, node);
+        float fvalue =  node.h_value + gValue;//+ distance;
+        std::cout<<"node_id: "<<node.index<<" fvalue: "<<fvalue<<" distance: "<<distance<< " node.h_value: "<<node.h_value<<std::endl;
         if (!node.visited){
             if (fvalue<lowest_fvalue){
                 lowest_fvalue = fvalue ;
@@ -92,6 +101,9 @@ Model::Node Search::Next_Node(std::vector<Model::Node>&open, float gValue){
         }
 
     }
+
+    std::cout<<"next_node_pos: "<<next_node_pos << " lowest_fvalue: " << lowest_fvalue << std::endl;
+    std::cout<<"****************************************"<<std::endl;
     if (open.size() == 1)
     {
         open.pop_back();
