@@ -30,7 +30,7 @@ static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
 int main(int argc, const char **argv)
 {    
     std::string osm_bounding_box = "";
-    std::string osm_data_file = "mtv2.osm";
+    std::string osm_data_file = "other.osm";
     if( argc > 1 ) {
         for( int i = 1; i < argc; ++i )
             if( std::string_view{argv[i]} == "-b" && ++i < argc )
@@ -38,12 +38,7 @@ int main(int argc, const char **argv)
             else if( std::string_view{argv[i]} == "-f" && ++i < argc )
                 osm_data_file = argv[i];
     }
-    else {
-        std::cout << "Usage: maps [-b MinLongitude,MinLattitude,MaxLongitude,MaxLattitude] [-f filename.xml]" << std::endl;
-        std::cout << "Will use the map of Rapperswil: 8.81598,47.22277,8.83,47.23" << std::endl << std::endl;
-        osm_bounding_box = "8.81598,47.22277,8.83,47.23";         
-    }
- 
+    
     std::vector<std::byte> osm_data;
     
  
