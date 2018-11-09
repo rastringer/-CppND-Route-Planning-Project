@@ -3,9 +3,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 set(CMAKE_CXX_STANDARD 17)
 
-# Use the CMakeLists.txt's parent-directory-name for the project's id/name
-get_filename_component(PROJECT_ID ${CMAKE_CURRENT_SOURCE_DIR} NAME)
-string(REPLACE " " "_" PROJECT_ID ${PROJECT_ID})
+set(PROJECT_ID maps)
 project(${PROJECT_ID})
 
 # Setup default installation subpaths, if they were not defined outside
