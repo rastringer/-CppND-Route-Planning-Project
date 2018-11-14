@@ -7,7 +7,7 @@ Search::Search(Model &model ):
     m_Model(model)
 {
     /*Set start and end points*/
-    end = m_Model.m_Nodes[m_Model.m_Ways[5].nodes[0]];
+    end = m_Model.m_Nodes[m_Model.m_Ways[3].nodes[0]];
     
     Calculate_H_Value(end);
     start = m_Model.m_Nodes[m_Model.m_Ways[0].nodes[0]];
@@ -43,11 +43,12 @@ bool Search::A_Star(){
     open.emplace_back(start);
     Model::Node current_node = open.back();
     float g_value = 0.0;
-    float stop = 200.0;
+    float stop = 11.0;
     while(open.size() > 0 && g_value< stop)
     // while (open.size() > 0)
     {
         current_node = Next_Node(open, g_value, current_node);
+	std::cout<<"current_node: "<<current_node.index << " visited: " << current_node.visited << std::endl;
         m_Model.path.emplace_back(current_node);
         if(current_node.x == end.x && current_node.y == end.y ) 
         {
@@ -56,12 +57,22 @@ bool Search::A_Star(){
         }
         
         std::vector<Model::Node> neighbors = Find_Neighbors(current_node);
-        for (auto node : neighbors)
-        {
-            open.emplace_back(node);
-        }
 
+        
+        for (auto &node : neighbors)
+        {
+            //open.emplace_back(node);
+	    std::vector<Model::Node>::iterator i = std::find_if(open.begin(),
+    open.end(), 
+    [&](const auto& node_in){ return node_in.index == node.index; } );
+	    if (i == std::end(open) ){
+                std::cout<<"here"<<std::endl;
+	        open.emplace_back(node);
+	    }
+        }
+	current_node.visited =true;
         g_value++;
+        std::cout<<"current_node: "<<current_node.index << " visited: " << current_node.visited << std::endl;
         
         
     }
@@ -82,15 +93,20 @@ Model::Node Search::Next_Node(std::vector<Model::Node>&open, float gValue, Model
     int next_node_pos;
     int counter = 0;
     int temp = 0;
+    std::cout<<"+++Next node++++ "<<std::endl;
     for(Model::Node &node : open  ){
         counter++;
         float distance = Calculate_distance(current_node, node);
-        float fvalue =  node.h_value + gValue;//+ distance;
-        std::cout<<"node_id: "<<node.index<<" fvalue: "<<fvalue<<" distance: "<<distance<< " node.h_value: "<<node.h_value<<std::endl;
+        float fvalue =  node.h_value + gValue + distance;
+        //std::cout<<"node_id: "<<node.index<<" fvalue: "<<fvalue<<" distance: "<<distance<< " node.h_value: "<<node.h_value<<std::endl;
+	
         if (!node.visited){
+	    std::cout<<"node_index: "<<node.index<<"  visited: "<<node.visited<<std::endl;	
             if (fvalue<lowest_fvalue){
+
                 lowest_fvalue = fvalue ;
                 next_node_pos = node.index;
+		
                 temp = counter;
             }
             else
@@ -102,8 +118,7 @@ Model::Node Search::Next_Node(std::vector<Model::Node>&open, float gValue, Model
 
     }
 
-    std::cout<<"next_node_pos: "<<next_node_pos << " lowest_fvalue: " << lowest_fvalue << std::endl;
-    std::cout<<"****************************************"<<std::endl;
+    
     if (open.size() == 1)
     {
         open.pop_back();
@@ -114,7 +129,10 @@ Model::Node Search::Next_Node(std::vector<Model::Node>&open, float gValue, Model
     }
     m_Model.next_position = m_Model.m_Nodes[next_node_pos];
 
-    m_Model.m_Nodes[next_node_pos].visited = true;
+    //m_Model.m_Nodes[next_node_pos].visited = true;
+std::cout<<"next_node_index: "<<next_node_pos << " visited: " << m_Model.m_Nodes[next_node_pos].visited << std::endl;
+    std::cout<<"****************************************"<<std::endl;
+	
     return m_Model.m_Nodes[next_node_pos];
 
 }
@@ -150,9 +168,16 @@ std::vector<Model::Node > Search::Find_Neighbors(Model::Node currentPosition)
                 if (node_id != currentPosition.id)
                 { 
                     if (!m_Model.m_Nodes[node_index].visited){
+			//std::cout<<"next_node_pos: "<<node_index << " visited: " << m_Model.m_Nodes[node_index].visited << std::endl;
                         neighbors.emplace_back(m_Model.m_Nodes[node_index]);
                         m_Model.neighbors.emplace_back(node_index);
+			//std::cout <<"next_node_pos: "<<node_index << "  new"<<std::endl;
                     }
+                    //else{
+                        //std::cout <<"next_node_pos: "<<node_index <<"  visited"<<std::endl;
+                        
+                    //}
+
                 }
             }
             
@@ -160,5 +185,12 @@ std::vector<Model::Node > Search::Find_Neighbors(Model::Node currentPosition)
                 
             }
     }
+
+    for (auto &node : neighbors)
+        {
+            std::cout <<"neighbors: "<<node.index <<"  visited: "<<node.visited<<std::endl;
+        }
+    //std::cout <<"+++++++++++++++++++++++++++"<<std::endl;
+    
     return neighbors;  
 }
