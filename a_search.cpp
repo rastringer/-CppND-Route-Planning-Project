@@ -58,7 +58,11 @@ bool Search::A_Star(){
         std::vector<Model::Node> neighbors = Find_Neighbors(current_node);
         for (auto node : neighbors)
         {
-            open.emplace_back(node);
+            //open.emplace_back(node);
+            std::vector<Model::Node>::iterator i = std::find_if(open.begin(), open.end(), [&](const auto& node_in){ return node_in.index == node.index; } );
+	    if (i == std::end(open) ){
+	        open.emplace_back(node);
+	    }
         }
 
         g_value++;
