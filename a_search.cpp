@@ -25,18 +25,20 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
 
     /*
     TODO:
-    2. Initialize a empty vector, for the open nodes
-    x. Insert into the open list of nodes, the start point
-    3. Initilize the g value.
-    1. Calculate the h value for all the nodes.
-    x. As long as there is nodes in the open list, keep looking at the nodes
-    x. Call a function that give you the best next node to move 
-    x. Add it to the path.
-    x. Check if the current node is the goal, if it is then return true.
-    x. If the current node is not the goal, then look for its neighbor.
-    x. Push the nodes into the open list of nodes.
-    x. Increment the g value.
-    x. If you ran out of nodes without findind a path, then there is no path.
+    1. Create a new object of type OpenNode.
+    2. Assign the node member to the start node.
+    3. Initialize an empty vector, for the open nodes.
+    4. Insert into the open list, the OpenNode.
+    5. Initilize the g value.
+    6. Calculate the h value for all the nodes.
+    7. As long as there is nodes in the open list, keep looking at the nodes
+    8. Call a function that give you the best next node to move based on the heuristic 
+    9. Check if the selected node is the goal, if it is then return the path found adding the nodes in the openlist and the current node.
+    10. If the current node is not the goal, then look for its neighbor.
+    11. Concatenate the parents seen to the current. 
+    12. Push the nodes into the open list of nodes.
+    13. Increment the g value.
+    14. If you ran out of nodes without findind a path, then there is no path.
     */
     
     float g_value = 0.0;
