@@ -304,8 +304,7 @@ void Model::Get_shared_nodes(){
        for(auto way :  m_Ways)
         {
             
-            if(way.type_highway == "primary" || way.type_highway == "secondary"
-             || way.type_highway == "service" || way.type_highway == "residential" ){
+            if(true){
                 std::vector<std::string>::iterator it;
                 it = find (way.id_nodes.begin(), way.id_nodes.end(), id);
                 

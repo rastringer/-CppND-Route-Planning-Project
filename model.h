@@ -10,8 +10,8 @@ class Model
 {
 public:
     struct Node {
-        double x = 0.f;
-        double y = 0.f;
+        float x = 0.f;
+        float y = 0.f;
         std::string id = "";
         float h_value = std::numeric_limits<float>::max();
         std::vector<int> way_num;
