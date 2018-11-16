@@ -23,6 +23,8 @@ add_executable(${PROJECT_ID}
     render.h
     a_search.cpp
     a_search.h
+    open_node.cpp
+    open_node.h
 )
 
 target_link_libraries(${PROJECT_ID}
