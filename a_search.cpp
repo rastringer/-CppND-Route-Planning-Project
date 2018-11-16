@@ -8,9 +8,9 @@ Search::Search(Model &model ):
     m_Model(model)
 {
     /*Set start and end points*/
-    end = m_Model.m_Nodes[m_Model.m_Ways[5].nodes[0]];
+    end = m_Model.Nodes()[m_Model.Ways()[5].nodes[0]];
     Calculate_H_Value(end);
-    start = m_Model.m_Nodes[m_Model.m_Ways[0].nodes[0]];
+    start = m_Model.Nodes()[m_Model.Ways()[0].nodes[0]];
 
     m_Model.start_position = start;
     m_Model.end_position = end;
@@ -38,7 +38,7 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
     11. Concatenate the parents seen to the current. 
     12. Push the nodes into the open list of nodes.
     13. Increment the g value.
-    14. If you ran out of nodes without findind a path, then there is no path.
+    14. If you ran out of nodes without finding a path, then there is no path.
     */
     
     float g_value = 0.0;
@@ -140,9 +140,9 @@ OpenNode Search::Next_Node(std::vector<OpenNode>&openlist, float gValue, OpenNod
     {
         openlist.erase(openlist.begin()+temp-1);
     }
-    m_Model.next_position = m_Model.m_Nodes[next_node_pos];
+    m_Model.next_position = m_Model.Nodes()[next_node_pos];
 
-    m_Model.m_Nodes[next_node_pos].visited = true;
+    m_Model.Nodes()[next_node_pos].visited = true;
     
     return lowest_node;
 
@@ -160,7 +160,7 @@ float Search::Calculate_distance(Model::Node current_node, Model::Node other_nod
 void Search::Calculate_H_Value(Model::Node end) 
 {
     float h_value;
-    for(auto &node: m_Model.m_Nodes) {
+    for(auto &node: m_Model.Nodes()) {
         h_value = std::sqrt(std::pow((end.x - node.x),2)+ std::pow((end.y - node.y),2));
         node.h_value = h_value;     
 
@@ -188,8 +188,8 @@ std::vector<Model::Node > Search::Find_Neighbors(Model::Node currentPosition)
 
                 if (node_id != currentPosition.id)
                 { 
-                    if (!m_Model.m_Nodes[node_index].visited){
-                    float distance = Calculate_distance(currentPosition, m_Model.m_Nodes[node_index]);
+                    if (!m_Model.Nodes()[node_index].visited){
+                    float distance = Calculate_distance(currentPosition, m_Model.Nodes()[node_index]);
                         if (distance < lowest_distance){
                             lowest_distance = distance;
                             lowest_index = node_index; 
@@ -199,7 +199,7 @@ std::vector<Model::Node > Search::Find_Neighbors(Model::Node currentPosition)
                 }
             }
             if(lowest_index >= 0){
-                neighbors.emplace_back(m_Model.m_Nodes[lowest_index]);
+                neighbors.emplace_back(m_Model.Nodes()[lowest_index]);
                 m_Model.neighbors.emplace_back(lowest_index);
                 
             }

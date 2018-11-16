@@ -57,7 +57,7 @@ public:
     
     auto MetricScale() const noexcept { return m_MetricScale; }    
     
-    auto &Nodes() const noexcept { return m_Nodes; }
+    auto &Nodes() { return m_Nodes; }
     auto &Intersections() const noexcept { return shared_Nodes; }
     auto &Ways() const noexcept { return m_Ways; }
     auto &Roads() const noexcept { return m_Roads; }
@@ -67,7 +67,20 @@ public:
     auto &Landuses() const noexcept { return m_Landuses; }
     auto &Railways() const noexcept { return m_Railways; }
     
-// private:
+    int pos_Node_start;
+    int pos_Node_end;
+
+    Node start_position;
+    Node end_position;
+    Node next_position;
+
+    std::vector<int> neighbors;
+    std::vector<Node> path;
+    
+
+    
+    
+private:
     void AdjustCoordinates();
     void BuildRings( Multipolygon &mp );
     void LoadData(const std::vector<std::byte> &xml);
@@ -89,13 +102,4 @@ public:
     double m_MaxLon = 0.;
     double m_MetricScale = 1.f;
 
-    int pos_Node_start;
-    int pos_Node_end;
-
-    Node start_position;
-    Node end_position;
-    Node next_position;
-
-    std::vector<int> neighbors;
-    std::vector<Node> path;
 };

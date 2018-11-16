@@ -46,9 +46,8 @@ void Render::DrawPath(io2d::output_surface &surface) const{
 }
 
 
-void Render::DrawNeighbors(io2d::output_surface &surface, std::vector<int> neighbors) const{
+void Render::DrawNeighbors(io2d::output_surface &surface, std::vector<int> neighbors)const {
     int number_way = 0;
-    //std::cout<<"+++Neighbors!+++"<<std::endl;
     for (auto index : neighbors )
     {
         io2d::render_props aliased{ io2d::antialias::none };
@@ -57,7 +56,6 @@ void Render::DrawNeighbors(io2d::output_surface &surface, std::vector<int> neigh
         auto pb = io2d::path_builder{}; 
         pb.matrix(m_Matrix);
         auto node = m_Model.Nodes()[index];
-	//std::cout<<"node_id: "<<node.index<<" hvalue: "<<node.h_value<< " node.h_value: "<<node.h_value<<std::endl;
         pb.new_figure({node.x, node.y});
         float constexpr l_marker = 0.01f;
         pb.rel_line({l_marker, 0.f});
@@ -76,14 +74,14 @@ void Render::DrawNeighbors(io2d::output_surface &surface, std::vector<int> neigh
 void Render::DrawPoint(io2d::output_surface &surface) const{
 
     int number_way = 0;
-    for (auto i = 0; i<m_Model.m_Ways[number_way].nodes.size(); i++ )
+    for (auto i = 0; i<m_Model.Ways()[number_way].nodes.size(); i++ )
     {
         io2d::render_props aliased{ io2d::antialias::none };
         io2d::brush foreBrush{ io2d::rgba_color::green };
 
         auto pb = io2d::path_builder{}; 
         pb.matrix(m_Matrix);
-        int index = m_Model.m_Ways[number_way].nodes[i];
+        int index = m_Model.Ways()[number_way].nodes[i];
         auto node = m_Model.Nodes()[index];
         pb.new_figure({node.x, node.y});
         float constexpr l_marker = 0.01f;

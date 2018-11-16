@@ -26,7 +26,7 @@ private:
     void DrawStartPosition(io2d::output_surface &surface) const;
     void DrawEndPosition(io2d::output_surface &surface) const;
     void DrawPoint(io2d::output_surface &surface) const;
-    void DrawNeighbors(io2d::output_surface &surface, std::vector<int> neighbors) const;
+    void DrawNeighbors(io2d::output_surface &surface, std::vector<int> neighbors)const ;
     void DrawNextPosition(io2d::output_surface &surface) const;
     void DrawPath(io2d::output_surface &surface) const;
 
@@ -37,7 +37,7 @@ private:
     io2d::interpreted_path PathLine() const;
 
     
-    const Model &m_Model;
+    Model &m_Model;
     float m_Scale = 1.f;
     float m_PixelsInMeter = 1.f;
     io2d::matrix_2d m_Matrix;
