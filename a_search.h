@@ -10,7 +10,7 @@ class Search
 {
 public:
     Search( Model &model );
-    bool A_Star(std::vector<OpenNode>&openlist);
+    std::vector<Model::Node> A_Star(std::vector<OpenNode>&openlist);
     void Calculate_H_Value(Model::Node end);
     void Sort_Nodes(std::vector<Model::Node> nodes);
     float Calculate_distance(Model::Node current_node, Model::Node other_node);

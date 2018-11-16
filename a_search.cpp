@@ -18,7 +18,8 @@ Search::Search(Model &model ):
     std::vector<OpenNode> openlist;
 
     //Call A* algorithm
-    A_Star(openlist);
+    m_Model.path = A_Star(openlist);
+    
     /*std::cout<<"openlist.size: " << openlist.size()<<"\n";
     std::vector<int> parents;
     
@@ -51,7 +52,7 @@ Search::Search(Model &model ):
 
 }
 
-bool Search::A_Star(std::vector<OpenNode> &openlist){
+std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
 
     /*
     TODO:
@@ -113,7 +114,8 @@ bool Search::A_Star(std::vector<OpenNode> &openlist){
             for (auto node : path_found){
                     std::cout<<"node: " << node.index<<"\n";
             }
-            return true;
+            
+            return path_found;
         }
         
         //Expand the current node (add all unvisited neighbors to the open list)  
@@ -142,7 +144,7 @@ bool Search::A_Star(std::vector<OpenNode> &openlist){
     std::cout<<"Didn't find it!"<<std::endl;
 
     
-    return false;
+    return {};
 }
 
 OpenNode Search::Next_Node(std::vector<OpenNode>&openlist, float gValue, OpenNode current_node){
