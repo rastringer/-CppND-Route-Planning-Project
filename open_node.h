@@ -11,5 +11,4 @@ public:
     OpenNode();
     Model::Node node;
     std::vector<Model::Node> parents;	
-//float g_value;
 };

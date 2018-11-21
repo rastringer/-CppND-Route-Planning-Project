@@ -51,7 +51,6 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
     OpenNode current_node = openlist.back();
 
     /*Expand nodes until you reach the goal. Use heuristic to prioritize what node to open first*/
-    //while(openlist.size() > 0 && g_value< stop)
     while (openlist.size() > 0)
     {   
         //Select the best node to explore next. 
@@ -91,7 +90,6 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
              open_node.node = neighbor;
              open_node.parents = neighbor_parents;
              open_node.node.g_value = current_node.node.g_value + distance(current_node.node, neighbor);
-             //open_node.g_value = current_node.g_value + distance(current_node.node, neighbor);
              
              //Add the neighbor to the open list.
              openlist.emplace_back(open_node);
@@ -140,10 +138,9 @@ Model::Node Search::Find_Neighbor(Model::Way way, Model::Node currentPosition){
     for(int node_index : way.nodes)
     {
         Model::Node node = m_Model.Nodes()[node_index];
-        if (node.id != currentPosition.id)
-            if (!node.visited)
-                if(distance(currentPosition, node) < distance(currentPosition, closest))
-                    closest = node;
+        if (node.id != currentPosition.id && !node.visited)
+            if(distance(currentPosition, node) < distance(currentPosition, closest))
+                closest = node;
     }
     
     return closest;
