@@ -2,6 +2,6 @@
 
 
 
-OpenNode::OpenNode(): g_value(0.0) {};
+OpenNode::OpenNode() {};
 
 

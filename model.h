@@ -14,6 +14,7 @@ public:
         float y = 0.f;
         std::string id = "";
         float h_value = std::numeric_limits<float>::max();
+        float g_value = 0.0;
         std::vector<int> way_num;
         bool visited = false;
         int index;
@@ -23,7 +24,6 @@ public:
         std::vector<int> nodes;
         std::vector<std::string> id_nodes;
         std::string type_highway;
-        
     };
     
     struct Road {
