@@ -32,8 +32,8 @@ void Render::Display( io2d::output_surface &surface )
     DrawStartPosition(surface);   
     DrawEndPosition(surface);
     //DrawPoint(surface);
-    DrawNeighbors(surface, m_Model.neighbors);
-    DrawNextPosition(surface);
+    //DrawNeighbors(surface, m_Model.neighbors);
+    //DrawNextPosition(surface);
     
 }
 

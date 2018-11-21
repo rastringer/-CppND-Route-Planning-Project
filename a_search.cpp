@@ -56,6 +56,7 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
     {   
         //Select the best node to explore next. 
         current_node = Next_Node(openlist, current_node);
+        m_Model.Nodes()[current_node.node.index].visited = true;
       
         //Check if the node selected is the goal.   
         if(current_node.node.x == end.x && current_node.node.y == end.y ) 
@@ -105,49 +106,15 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
 }
 
 OpenNode Search::Next_Node(std::vector<OpenNode>&openlist, OpenNode current_node){
-    float lowest_fvalue = std::numeric_limits<float>::max();
+    std::sort(openlist.begin(), openlist.end(), [](const auto &_1st, const auto &_2nd){
+        float _1st_fvalue = _1st.node.h_value + _1st.node.g_value;    
+        float _2nd_fvalue = _2nd.node.h_value + _2nd.node.g_value;
+        return (float)_1st_fvalue < (float)_2nd_fvalue; 
+    });
     
-    OpenNode lowest_node;
-    int next_node_pos;
-    int counter = 0;
-    int temp = 0;
-    for(OpenNode &o_node : openlist  ){
-        
-        Model::Node node = o_node.node;
-        counter++;
-        float fvalue = node.h_value + node.g_value;
-
-        if (!node.visited){
-            if (fvalue<lowest_fvalue){
-                lowest_fvalue = fvalue ;
-                next_node_pos = node.index;
-                temp = counter;
-                lowest_node = o_node;
-            }
-            else
-            {
-                next_node_pos = next_node_pos;
-                lowest_node = lowest_node;
-                temp = temp;
-            }
-        }
-
-    }
-
-    if (openlist.size() == 1)
-    {
-        openlist.pop_back();
-    }
-    else
-    {
-        openlist.erase(openlist.begin()+temp-1);
-    }
-    m_Model.next_position = m_Model.Nodes()[next_node_pos];
-
-    m_Model.Nodes()[next_node_pos].visited = true;
-    
-    return lowest_node;
-
+    OpenNode lowest_node = openlist.front();
+    openlist.erase(openlist.begin());
+    return lowest_node ;
 }
 
 
