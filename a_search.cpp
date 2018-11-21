@@ -69,7 +69,7 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
             /*float distance = 0.0;
             Model::Node curr = path_found.front();
             for (auto node : path_found){
-                distance += Calculate_distance(node, curr);
+                distance += distance(node, curr);
                 curr = node;
                 
             }
@@ -112,8 +112,7 @@ OpenNode Search::Next_Node(std::vector<OpenNode>&openlist, float gValue, OpenNod
         
         Model::Node node = o_node.node;
         counter++;
-        float distance = Calculate_distance(current_node.node, node);
-        float fvalue =  node.h_value + gValue+ distance;
+        float fvalue = node.h_value + gValue + distance(current_node.node, node);
 
         if (!node.visited){
             if (fvalue<lowest_fvalue){
@@ -150,10 +149,9 @@ OpenNode Search::Next_Node(std::vector<OpenNode>&openlist, float gValue, OpenNod
 
 
 
-float Search::Calculate_distance(Model::Node current_node, Model::Node other_node){
+float Search::distance(Model::Node current_node, Model::Node other_node){
     return std::sqrt(std::pow((current_node.x - other_node.x),2)+ std::pow((current_node.y - other_node.y),2));
 }
-
 
 
 
@@ -168,42 +166,31 @@ void Search::Calculate_H_Value(Model::Node end)
 }
 
 
+Model::Node Search::Find_Neighbor(Model::Way way, Model::Node currentPosition){
+    Model::Node closest = {};
+    
+    for(int node_index : way.nodes)
+    {
+        Model::Node node = m_Model.Nodes()[node_index];
+        if (node.id != currentPosition.id)
+            if (!node.visited)
+                if(distance(currentPosition, node) < distance(currentPosition, closest))
+                    closest = node;
+    }
+    
+    return closest;
+} 
+
 std::vector<Model::Node > Search::Find_Neighbors(Model::Node currentPosition)
 {
-    std::vector<Model::Node > neighbors={};
-    m_Model.neighbors = {};
+    std::vector<Model::Node > neighbors= {};
     
     for(auto way_num : currentPosition.way_num)
     {
-        auto way =m_Model.Ways()[way_num];
-
-        if( true){
-            float lowest_distance = std::numeric_limits<float>::max() ;
-            int lowest_index = -1;
-            for(int i=0; i<m_Model.Ways()[way_num].id_nodes.size(); i++)
-            {
-                int node_index = m_Model.Ways()[way_num].nodes[i];
-                std::string node_id = m_Model.Ways()[way_num].id_nodes[i];
-                
-
-                if (node_id != currentPosition.id)
-                { 
-                    if (!m_Model.Nodes()[node_index].visited){
-                    float distance = Calculate_distance(currentPosition, m_Model.Nodes()[node_index]);
-                        if (distance < lowest_distance){
-                            lowest_distance = distance;
-                            lowest_index = node_index; 
-                        }
-
-                    }
-                }
-            }
-            if(lowest_index >= 0){
-                neighbors.emplace_back(m_Model.Nodes()[lowest_index]);
-                m_Model.neighbors.emplace_back(lowest_index);
-                
-            }
-        }
+        Model::Node new_neighbor = Find_Neighbor(m_Model.Ways()[way_num], currentPosition);
+        if(new_neighbor.id != "")
+            neighbors.emplace_back(new_neighbor);
+        
     }
     return neighbors;  
 }

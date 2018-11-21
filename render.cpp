@@ -32,7 +32,7 @@ void Render::Display( io2d::output_surface &surface )
     DrawStartPosition(surface);   
     DrawEndPosition(surface);
     //DrawPoint(surface);
-    //DrawNeighbors(surface, m_Model.neighbors);
+    DrawNeighbors(surface, m_Model.neighbors);
     DrawNextPosition(surface);
     
 }
@@ -46,16 +46,15 @@ void Render::DrawPath(io2d::output_surface &surface) const{
 }
 
 
-void Render::DrawNeighbors(io2d::output_surface &surface, std::vector<int> neighbors)const {
+void Render::DrawNeighbors(io2d::output_surface &surface, std::vector<Model::Node> neighbors)const {
     int number_way = 0;
-    for (auto index : neighbors )
+    for (auto node : neighbors )
     {
         io2d::render_props aliased{ io2d::antialias::none };
         io2d::brush foreBrush{ io2d::rgba_color::white };
 
         auto pb = io2d::path_builder{}; 
         pb.matrix(m_Matrix);
-        auto node = m_Model.Nodes()[index];
         pb.new_figure({node.x, node.y});
         float constexpr l_marker = 0.01f;
         pb.rel_line({l_marker, 0.f});

@@ -26,7 +26,7 @@ private:
     void DrawStartPosition(io2d::output_surface &surface) const;
     void DrawEndPosition(io2d::output_surface &surface) const;
     void DrawPoint(io2d::output_surface &surface) const;
-    void DrawNeighbors(io2d::output_surface &surface, std::vector<int> neighbors)const ;
+    void DrawNeighbors(io2d::output_surface &surface, std::vector<Model::Node> neighbors)const ;
     void DrawNextPosition(io2d::output_surface &surface) const;
     void DrawPath(io2d::output_surface &surface) const;
 

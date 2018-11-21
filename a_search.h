@@ -12,8 +12,9 @@ public:
     Search( Model &model );
     std::vector<Model::Node> A_Star(std::vector<OpenNode>&openlist);
     void Calculate_H_Value(Model::Node end);
-    float Calculate_distance(Model::Node current_node, Model::Node other_node);    
+    float distance(Model::Node current_node, Model::Node other_node);    
     std::vector<Model::Node> Find_Neighbors(Model::Node currentPosition);
+    Model::Node Find_Neighbor(Model::Way way, Model::Node currentPosition);
     OpenNode Next_Node(std::vector<OpenNode>&openlist, float gValue, OpenNode current_node);
 
     Model::Node start;
