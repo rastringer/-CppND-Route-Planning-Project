@@ -41,7 +41,7 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
     14. If you ran out of nodes without finding a path, then there is no path.
     */
     
-    float g_value = 0.0;
+
 
 
     OpenNode open_node;
@@ -55,7 +55,7 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
     while (openlist.size() > 0)
     {   
         //Select the best node to explore next. 
-        current_node = Next_Node(openlist,  g_value, current_node);
+        current_node = Next_Node(openlist, current_node);
       
         //Check if the node selected is the goal.   
         if(current_node.node.x == end.x && current_node.node.y == end.y ) 
@@ -66,14 +66,14 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
             std::vector<Model::Node> path_found = current_node.parents;
             path_found.emplace_back(current_node.node);
             
-            /*float distance = 0.0;
+            float dist = 0.0;
             Model::Node curr = path_found.front();
             for (auto node : path_found){
-                distance += distance(node, curr);
+                dist += distance(node, curr);
                 curr = node;
                 
             }
-            std::cout<<"distance: " << distance <<"\n";*/
+            std::cout<<"distance: " << dist <<"\n";
             return path_found;
         }
         
@@ -89,19 +89,21 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
              //Buid an OpenNode object
              open_node.node = neighbor;
              open_node.parents = neighbor_parents;
+             open_node.g_value = current_node.g_value + distance(current_node.node, neighbor);
              
              //Add the neighbor to the open list.
              openlist.emplace_back(open_node);
         }
               
     }  //openlist while loop
+
     
     std::cout<<"Didn't find it!"<<std::endl;
     
     return {};
 }
 
-OpenNode Search::Next_Node(std::vector<OpenNode>&openlist, float gValue, OpenNode current_node){
+OpenNode Search::Next_Node(std::vector<OpenNode>&openlist, OpenNode current_node){
     float lowest_fvalue = std::numeric_limits<float>::max();
     
     OpenNode lowest_node;
@@ -112,7 +114,7 @@ OpenNode Search::Next_Node(std::vector<OpenNode>&openlist, float gValue, OpenNod
         
         Model::Node node = o_node.node;
         counter++;
-        float fvalue = node.h_value + gValue + distance(current_node.node, node);
+        float fvalue = node.h_value + o_node.g_value;
 
         if (!node.visited){
             if (fvalue<lowest_fvalue){
