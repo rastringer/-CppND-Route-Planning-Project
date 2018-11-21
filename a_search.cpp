@@ -107,14 +107,12 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
 
 OpenNode Search::Next_Node(std::vector<OpenNode>&openlist, OpenNode current_node){
     std::sort(openlist.begin(), openlist.end(), [](const auto &_1st, const auto &_2nd){
-        float _1st_fvalue = _1st.node.h_value + _1st.node.g_value;    
-        float _2nd_fvalue = _2nd.node.h_value + _2nd.node.g_value;
-        return (float)_1st_fvalue < (float)_2nd_fvalue; 
+        return _1st.node.h_value + _1st.node.g_value < _2nd.node.h_value + _2nd.node.g_value; 
     });
     
     OpenNode lowest_node = openlist.front();
     openlist.erase(openlist.begin());
-    return lowest_node ;
+    return lowest_node;
 }
 
 
