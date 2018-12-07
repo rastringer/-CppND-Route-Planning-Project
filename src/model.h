@@ -1,10 +1,11 @@
 #pragma once
 
-#include <vector>
-#include <unordered_map>
-#include <string>
 #include <cstddef>
 #include <limits>
+#include <cmath>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 class Model
 {
@@ -18,6 +19,10 @@ public:
         std::vector<int> way_num;
         bool visited = false;
         int index;
+
+        float distance(Node other) {
+            return std::sqrt(std::pow((x - other.x),2)+ std::pow((y - other.y),2));
+        }
     };
     
     struct Way {

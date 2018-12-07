@@ -69,7 +69,7 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
             float dist = 0.0;
             Model::Node curr = path_found.front();
             for (auto node : path_found){
-                dist += distance(node, curr);
+                dist += node.distance(curr);
                 curr = node;
 
             }
@@ -101,7 +101,7 @@ void Search::AddNeighbors(std::vector<OpenNode> &openlist, OpenNode current_node
         //Buid an OpenNode object
         open_node.node = neighbor;
         open_node.parents = neighbor_parents;
-        open_node.node.g_value = current_node.node.g_value + distance(current_node.node, neighbor);
+        open_node.node.g_value = current_node.node.g_value + current_node.node.distance(neighbor);
 
         //Add the neighbor to the open list.
         openlist.emplace_back(open_node);
@@ -117,13 +117,6 @@ OpenNode Search::Next_Node(std::vector<OpenNode>&openlist, OpenNode current_node
     openlist.erase(openlist.begin());
     return lowest_node;
 }
-
-
-
-float Search::distance(Model::Node current_node, Model::Node other_node){
-    return std::sqrt(std::pow((current_node.x - other_node.x),2)+ std::pow((current_node.y - other_node.y),2));
-}
-
 
 
 void Search::Calculate_H_Value(Model::Node end)
@@ -144,7 +137,7 @@ Model::Node Search::Find_Neighbor(Model::Way way, Model::Node currentPosition){
     {
         Model::Node node = m_Model.Nodes()[node_index];
         if (node.id != currentPosition.id && !node.visited)
-            if(distance(currentPosition, node) < distance(currentPosition, closest))
+            if(currentPosition.distance(node) < currentPosition.distance(closest))
                 closest = node;
     }
 
