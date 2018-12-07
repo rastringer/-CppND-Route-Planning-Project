@@ -4,7 +4,6 @@
 3. Cairo: sudo apt-get install libcairo2-dev
 4. graphicsmagick: sudo apt-get install libgraphicsmagick1-dev
 5. libpng: sudo apt-get install libpng-dev
-6. io2d
 
 ### How to run with CMake
 
@@ -16,5 +15,6 @@ mkdir build
 cd build
 cmake ..
 make
+../bin/test
 ../bin/CppND-Route-Planning-Solution -f ../map.osm
 ````

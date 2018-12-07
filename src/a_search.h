@@ -16,6 +16,7 @@ public:
     Model::Node Find_Neighbor(Model::Way way, Model::Node currentPosition);
     OpenNode Next_Node(std::vector<OpenNode>&openlist, OpenNode current_node);
     void AddNeighbors(std::vector<OpenNode> &openList, OpenNode current_node);
+    float GetDistance() const { return distance; };
 
     Model::Node start;
     Model::Node end;
@@ -25,5 +26,6 @@ public:
 
 private:
     Model &m_Model;
+    float distance;
 
 };
