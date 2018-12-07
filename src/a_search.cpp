@@ -76,24 +76,7 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
             std::cout<<"distance: " << dist <<"\n";
             return path_found;
         }
-
-        //Expand the current node (add all unvisited neighbors to the open list)
-        std::vector<Model::Node> neighbors = Find_Neighbors(current_node.node);
-
-        //Keep track of the path used to reach the new nodes going into open list.
-        std::vector<Model::Node> neighbor_parents = current_node.parents;
-        neighbor_parents.emplace_back(current_node.node);
-
-        for (auto neighbor : neighbors)
-        {
-             //Buid an OpenNode object
-             open_node.node = neighbor;
-             open_node.parents = neighbor_parents;
-             open_node.node.g_value = current_node.node.g_value + distance(current_node.node, neighbor);
-
-             //Add the neighbor to the open list.
-             openlist.emplace_back(open_node);
-        }
+        AddNeighbors(openlist, current_node);
 
     }  //openlist while loop
 
@@ -101,6 +84,28 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
     std::cout<<"Didn't find it!"<<std::endl;
 
     return {};
+}
+
+void Search::AddNeighbors(std::vector<OpenNode> &openlist, OpenNode current_node) {
+    //Expand the current node (add all unvisited neighbors to the open list)
+    std::vector<Model::Node> neighbors = Find_Neighbors(current_node.node);
+
+    //Keep track of the path used to reach the new nodes going into open list.
+    std::vector<Model::Node> neighbor_parents = current_node.parents;
+    neighbor_parents.emplace_back(current_node.node);
+
+    OpenNode open_node;
+
+    for (auto neighbor : neighbors)
+    {
+        //Buid an OpenNode object
+        open_node.node = neighbor;
+        open_node.parents = neighbor_parents;
+        open_node.node.g_value = current_node.node.g_value + distance(current_node.node, neighbor);
+
+        //Add the neighbor to the open list.
+        openlist.emplace_back(open_node);
+    }
 }
 
 OpenNode Search::Next_Node(std::vector<OpenNode>&openlist, OpenNode current_node){
