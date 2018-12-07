@@ -10,7 +10,7 @@
 
 ```
 export CXX=g++-7
-git clone --recurse-submodules https://github.com/udacity/CppND-Route-Planning.git
+git clone --recurse-submodules https://github.com/udacity/CppND-Route-Planning-Solution.git
 cd CppND-Route-Planning
 mkdir build 
 cd build
