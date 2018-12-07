@@ -18,7 +18,6 @@ set(LIBRARY_OUTPUT_PATH "${MAINFOLDER}/lib")
 #
 # Locate Project Prerequisites
 #
-find_package(io2d REQUIRED)
 find_package(Cairo)
 find_package(GraphicsMagick)
 
@@ -27,3 +26,4 @@ find_package(GraphicsMagick)
 #
 add_subdirectory(src)
 add_subdirectory(thirdparty/pugixml)
+add_subdirectory(thirdparty/P0267_RefImpl)

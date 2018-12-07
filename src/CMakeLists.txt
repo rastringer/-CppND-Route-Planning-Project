@@ -14,7 +14,7 @@ file(GLOB project_SRCS *.cpp *.h)
 add_executable(${project_BIN} ${project_SRCS})
 
 target_link_libraries(${project_BIN}
-    PRIVATE io2d::io2d
+    PRIVATE io2d
     PUBLIC pugixml
 )
 
