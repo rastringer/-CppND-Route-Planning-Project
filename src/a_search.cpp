@@ -61,19 +61,19 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
         if(current_node.node.x == end.x && current_node.node.y == end.y )
         {
             std::cout<<"Hooray for you!"<<std::endl;
+            distance = 0.0f;
 
             //Build the path with all the parents and the current node.
             std::vector<Model::Node> path_found = current_node.parents;
             path_found.emplace_back(current_node.node);
 
-            float dist = 0.0;
             Model::Node curr = path_found.front();
             for (auto node : path_found){
-                dist += node.distance(curr);
+                distance += node.distance(curr);
                 curr = node;
 
             }
-            std::cout<<"distance: " << dist <<"\n";
+            std::cout<<"distance: " << distance <<"\n";
             return path_found;
         }
         AddNeighbors(openlist, current_node);
