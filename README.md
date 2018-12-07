@@ -16,5 +16,5 @@ mkdir build
 cd build
 cmake ..
 make
-./maps -f ../maps.osm
+../bin/CppND-Route-Planning-Solution -f ../map.osm
 ````
