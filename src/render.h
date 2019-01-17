@@ -22,16 +22,9 @@ private:
     void DrawLeisure(io2d::output_surface &surface) const;
     void DrawWater(io2d::output_surface &surface) const;
     void DrawLanduses(io2d::output_surface &surface) const;
-    void DrawIntersection(io2d::output_surface &surface) const;
     void DrawStartPosition(io2d::output_surface &surface) const;
     void DrawEndPosition(io2d::output_surface &surface) const;
-    void DrawPoint(io2d::output_surface &surface) const;
-    void DrawNeighbors(io2d::output_surface &surface, std::vector<Model::Node> neighbors)const ;
-    void DrawNextPosition(io2d::output_surface &surface) const;
     void DrawPath(io2d::output_surface &surface) const;
-
-    
-
     io2d::interpreted_path PathFromWay(const Model::Way &way) const;
     io2d::interpreted_path PathFromMP(const Model::Multipolygon &mp) const;
     io2d::interpreted_path PathLine() const;

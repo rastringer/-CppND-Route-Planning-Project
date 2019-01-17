@@ -27,14 +27,9 @@ void Render::Display( io2d::output_surface &surface )
     DrawRailways(surface);
     DrawHighways(surface);    
     DrawBuildings(surface);  
-    // DrawIntersection(surface);
     DrawPath(surface);   
     DrawStartPosition(surface);   
     DrawEndPosition(surface);
-    //DrawPoint(surface);
-    //DrawNeighbors(surface, m_Model.neighbors);
-    //DrawNextPosition(surface);
-    
 }
 
 void Render::DrawPath(io2d::output_surface &surface) const{
@@ -44,59 +39,6 @@ void Render::DrawPath(io2d::output_surface &surface) const{
     surface.stroke(foreBrush, PathLine(), std::nullopt, io2d::stroke_props{width});
 
 }
-
-
-void Render::DrawNeighbors(io2d::output_surface &surface, std::vector<Model::Node> neighbors)const {
-    int number_way = 0;
-    for (auto node : neighbors )
-    {
-        io2d::render_props aliased{ io2d::antialias::none };
-        io2d::brush foreBrush{ io2d::rgba_color::white };
-
-        auto pb = io2d::path_builder{}; 
-        pb.matrix(m_Matrix);
-        pb.new_figure({node.x, node.y});
-        float constexpr l_marker = 0.01f;
-        pb.rel_line({l_marker, 0.f});
-        pb.rel_line({0.f, l_marker});
-        pb.rel_line({-l_marker, 0.f});
-        pb.rel_line({0.f, -l_marker});
-        pb.close_figure();
-        
-        surface.fill(foreBrush, pb);
-        surface.stroke(foreBrush, io2d::interpreted_path{pb}, std::nullopt, std::nullopt, std::nullopt, aliased);
-
-    }
-
-}
-
-void Render::DrawPoint(io2d::output_surface &surface) const{
-
-    int number_way = 0;
-    for (auto i = 0; i<m_Model.Ways()[number_way].nodes.size(); i++ )
-    {
-        io2d::render_props aliased{ io2d::antialias::none };
-        io2d::brush foreBrush{ io2d::rgba_color::green };
-
-        auto pb = io2d::path_builder{}; 
-        pb.matrix(m_Matrix);
-        int index = m_Model.Ways()[number_way].nodes[i];
-        auto node = m_Model.Nodes()[index];
-        pb.new_figure({node.x, node.y});
-        float constexpr l_marker = 0.01f;
-        pb.rel_line({l_marker, 0.f});
-        pb.rel_line({0.f, l_marker});
-        pb.rel_line({-l_marker, 0.f});
-        pb.rel_line({0.f, -l_marker});
-        pb.close_figure();
-        
-        surface.fill(foreBrush, pb);
-        surface.stroke(foreBrush, io2d::interpreted_path{pb}, std::nullopt, std::nullopt, std::nullopt, aliased);
-
-    }
-
-}
-
 
 void Render::DrawEndPosition(io2d::output_surface &surface) const{
     io2d::render_props aliased{ io2d::antialias::none };
@@ -118,7 +60,6 @@ void Render::DrawEndPosition(io2d::output_surface &surface) const{
 
 }
 
-
 void Render::DrawStartPosition(io2d::output_surface &surface) const{
     io2d::render_props aliased{ io2d::antialias::none };
     io2d::brush foreBrush{ io2d::rgba_color::green };
@@ -138,48 +79,6 @@ void Render::DrawStartPosition(io2d::output_surface &surface) const{
     surface.stroke(foreBrush, io2d::interpreted_path{pb}, std::nullopt, std::nullopt, std::nullopt, aliased);
 
 }
-
-void Render::DrawNextPosition(io2d::output_surface &surface) const{
-    io2d::render_props aliased{ io2d::antialias::none };
-    io2d::brush foreBrush{ io2d::rgba_color::blue };
-
-    auto pb = io2d::path_builder{}; 
-    pb.matrix(m_Matrix);
-
-    pb.new_figure({m_Model.next_position.x, m_Model.next_position.y});
-    float constexpr l_marker = 0.01f;
-    pb.rel_line({l_marker, 0.f});
-    pb.rel_line({0.f, l_marker});
-    pb.rel_line({-l_marker, 0.f});
-    pb.rel_line({0.f, -l_marker});
-    pb.close_figure();
-    
-    surface.fill(foreBrush, pb);
-    surface.stroke(foreBrush, io2d::interpreted_path{pb}, std::nullopt, std::nullopt, std::nullopt, aliased);
-
-}
-
-void Render::DrawIntersection(io2d::output_surface &surface) const
-{
-    for( auto &intersection: m_Model.Intersections() ) {
-        io2d::render_props aliased{ io2d::antialias::none };
-        io2d::brush foreBrush{ io2d::rgba_color::white };
-
-        auto pb = io2d::path_builder{}; 
-        pb.matrix(m_Matrix);
-        pb.new_figure({intersection.x, intersection.y});
-        float constexpr l_marker = 0.01f;
-        pb.rel_line({l_marker, 0.f});
-        pb.rel_line({0.f, l_marker});
-        pb.rel_line({-l_marker, 0.f});
-        pb.rel_line({0.f, -l_marker});
-        pb.close_figure();
-        
-        surface.fill(foreBrush, pb);
-        surface.stroke(foreBrush, io2d::interpreted_path{pb}, std::nullopt, std::nullopt, std::nullopt, aliased);
-    }
-}
-
 
 void Render::DrawBuildings(io2d::output_surface &surface) const
 {
@@ -212,25 +111,6 @@ void Render::DrawLanduses(io2d::output_surface &surface) const
             surface.fill(br->second, PathFromMP(landuse));
 }
 
-io2d::interpreted_path Render::PathLine() const
-{    
-    if( m_Model.path.empty() )
-        return {};
-
-    const auto nodes = m_Model.path;    
-    
-    auto pb = io2d::path_builder{};
-    pb.matrix(m_Matrix);
-    pb.new_figure( ToPoint2D( m_Model.path[0]));
-
-    for( int i=1; i< m_Model.path.size();i++ )
-        pb.line( ToPoint2D(m_Model.path[i])); 
-
-      
-    return io2d::interpreted_path{pb};
-}
-
-
 void Render::DrawHighways(io2d::output_surface &surface) const
 {
     auto ways = m_Model.Ways().data();
@@ -253,6 +133,24 @@ void Render::DrawRailways(io2d::output_surface &surface) const
         surface.stroke(m_RailwayStrokeBrush, path, std::nullopt, io2d::stroke_props{m_RailwayOuterWidth * m_PixelsInMeter});
         surface.stroke(m_RailwayDashBrush, path, std::nullopt, io2d::stroke_props{m_RailwayInnerWidth * m_PixelsInMeter}, m_RailwayDashes);
     }
+}
+
+io2d::interpreted_path Render::PathLine() const
+{    
+    if( m_Model.path.empty() )
+        return {};
+
+    const auto nodes = m_Model.path;    
+    
+    auto pb = io2d::path_builder{};
+    pb.matrix(m_Matrix);
+    pb.new_figure( ToPoint2D( m_Model.path[0]));
+
+    for( int i=1; i< m_Model.path.size();i++ )
+        pb.line( ToPoint2D(m_Model.path[i])); 
+
+      
+    return io2d::interpreted_path{pb};
 }
 
 io2d::interpreted_path Render::PathFromWay(const Model::Way &way) const
@@ -322,12 +220,12 @@ void Render::BuildLanduseBrushes()
 static float RoadMetricWidth(Model::Road::Type type)
 {
     switch( type ) {
-        case Model::Road::Motorway:     return 1.f;
-        case Model::Road::Trunk:        return 1.f;
-        case Model::Road::Primary:      return 1.f;
-        case Model::Road::Secondary:    return 1.f;    
-        case Model::Road::Tertiary:     return 1.f;
-        case Model::Road::Residential:  return 1.f;
+        case Model::Road::Motorway:     return 6.f;
+        case Model::Road::Trunk:        return 6.f;
+        case Model::Road::Primary:      return 5.f;
+        case Model::Road::Secondary:    return 5.f;    
+        case Model::Road::Tertiary:     return 4.f;
+        case Model::Road::Residential:  return 2.5f;
         case Model::Road::Unclassified: return 2.5f;            
         case Model::Road::Service:      return 1.f;
         case Model::Road::Footway:      return 0.f;
@@ -340,13 +238,13 @@ static io2d::rgba_color RoadColor(Model::Road::Type type)
     switch( type) {
         case Model::Road::Motorway:     return io2d::rgba_color{226, 122, 143};
         case Model::Road::Trunk:        return io2d::rgba_color{245, 161, 136};
-        case Model::Road::Primary:      return io2d::rgba_color{255, 0, 0};
-        case Model::Road::Secondary:    return io2d::rgba_color{255, 0, 255};    
-        case Model::Road::Tertiary:     return io2d::rgba_color{232, 65, 244};
-        case Model::Road::Residential:  return io2d::rgba_color{0, 0, 0};
-        case Model::Road::Service:      return io2d::rgba_color{0, 0, 255};
-        case Model::Road::Footway:      return io2d::rgba_color{125, 125, 125};    
-        case Model::Road::Unclassified: return io2d::rgba_color{0, 0, 0};
+        case Model::Road::Primary:      return io2d::rgba_color{249, 207, 144};
+        case Model::Road::Secondary:    return io2d::rgba_color{244, 251, 173};    
+        case Model::Road::Tertiary:     return io2d::rgba_color{244, 251, 173};
+        case Model::Road::Residential:  return io2d::rgba_color{254, 254, 254};
+        case Model::Road::Service:      return io2d::rgba_color{254, 254, 254};
+        case Model::Road::Footway:      return io2d::rgba_color{241, 106, 96};    
+        case Model::Road::Unclassified: return io2d::rgba_color{254, 254, 254};
         default:                        return io2d::rgba_color::grey;  
     }
 }
