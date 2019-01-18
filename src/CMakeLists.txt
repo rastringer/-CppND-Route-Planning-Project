@@ -21,7 +21,7 @@ target_link_libraries(${project_BIN}
 #
 # create a library for unit tests
 #
-add_library(a_search OBJECT a_search.cpp open_node.cpp model.cpp)
+add_library(a_search OBJECT a_search.cpp model.cpp)
 target_include_directories(a_search PRIVATE ../thirdparty/pugixml/src)
 
 

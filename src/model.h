@@ -11,14 +11,15 @@ class Model
 {
 public:
     struct Node {
+        std::string id = "";
+        std::vector<int> way_num;
+        int index;
+        int parent_index = -1;
         float x = 0.f;
         float y = 0.f;
-        std::string id = "";
         float h_value = std::numeric_limits<float>::max();
         float g_value = 0.0;
-        std::vector<int> way_num;
         bool visited = false;
-        int index;
 
         float distance(Node other) {
             return std::sqrt(std::pow((x - other.x),2)+ std::pow((y - other.y),2));
@@ -78,9 +79,8 @@ public:
     Node start_position;
     Node end_position;
     Node next_position;
-
-    std::vector<Node> neighbors;
     std::vector<Node> path;
+    std::vector<int> parents;
     
 
     
