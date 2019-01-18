@@ -56,6 +56,7 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
         //Select the best node to explore next.
         current_node = Next_Node(openlist, current_node);
         m_Model.Nodes()[current_node.node.index].visited = true;
+        m_Model.path.push_back(current_node.node);
 
         //Check if the node selected is the goal.
         if(current_node.node.x == end.x && current_node.node.y == end.y )
@@ -63,18 +64,14 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
             std::cout<<"Hooray for you!"<<std::endl;
             distance = 0.0f;
 
-            //Build the path with all the parents and the current node.
-            std::vector<Model::Node> path_found = current_node.parents;
-            path_found.emplace_back(current_node.node);
-
-            Model::Node curr = path_found.front();
-            for (auto node : path_found){
+            Model::Node curr = m_Model.path.front();
+            for (auto node : m_Model.path){
                 distance += node.distance(curr);
                 curr = node;
 
             }
             std::cout<<"distance: " << distance <<"\n";
-            return path_found;
+            return m_Model.path;
         }
         AddNeighbors(openlist, current_node);
 
@@ -90,17 +87,13 @@ void Search::AddNeighbors(std::vector<OpenNode> &openlist, OpenNode current_node
     //Expand the current node (add all unvisited neighbors to the open list)
     std::vector<Model::Node> neighbors = Find_Neighbors(current_node.node);
 
-    //Keep track of the path used to reach the new nodes going into open list.
-    std::vector<Model::Node> neighbor_parents = current_node.parents;
-    neighbor_parents.emplace_back(current_node.node);
-
     OpenNode open_node;
 
     for (auto neighbor : neighbors)
     {
         //Buid an OpenNode object
         open_node.node = neighbor;
-        open_node.parents = neighbor_parents;
+        open_node.node.parent_index = current_node.node.index;
         open_node.node.g_value = current_node.node.g_value + current_node.node.distance(neighbor);
 
         //Add the neighbor to the open list.
