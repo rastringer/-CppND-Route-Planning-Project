@@ -15,14 +15,13 @@ Search::Search(Model &model ):
     m_Model.start_position = start;
     m_Model.end_position = end;
     m_Model.parents.assign(m_Model.Nodes().size() ,-1);
-    std::vector<Model::Node> openlist;
-
+    
     //Call A* algorithm
-    m_Model.path = A_Star(openlist);
+    m_Model.path = A_Star();
 
 }
 
-std::vector<Model::Node> Search::A_Star(std::vector<Model::Node> &openlist){
+std::vector<Model::Node> Search::A_Star(){
 
     /*
     TODO:
@@ -42,7 +41,7 @@ std::vector<Model::Node> Search::A_Star(std::vector<Model::Node> &openlist){
     14. If you ran out of nodes without finding a path, then there is no path.
     */
 
-
+    std::vector<Model::Node> openlist;
     openlist.emplace_back(start);
     Model::Node current_node = openlist.back();
 
@@ -51,25 +50,12 @@ std::vector<Model::Node> Search::A_Star(std::vector<Model::Node> &openlist){
     {
         //Select the best node to explore next.
         current_node = Next_Node(openlist, current_node);
-        //m_Model.Nodes()[current_node.node.index].visited = true;
 
         //Check if the node selected is the goal.
         if(current_node.x == end.x && current_node.y == end.y )
         {
             std::cout<<"Hooray for you!"<<std::endl;
-            distance = 0.0f;
-            std::vector<Model::Node> path_found;
-
-            Model::Node curr = current_node;
-            Model::Node parent;
-            while (curr.x != start.x && curr.y != start.y) {
-                path_found.push_back(curr);
-                parent = m_Model.Nodes()[m_Model.parents[curr.index]];
-                distance += curr.distance(parent);
-                curr = parent;
-            }
-            path_found.push_back(curr);
-
+            std::vector<Model::Node> path_found = Create_Path_Found(current_node); 
             std::cout<<"distance: " << distance <<"\n";
             return path_found;
         }
@@ -87,19 +73,14 @@ void Search::AddNeighbors(std::vector<Model::Node> &openlist, Model::Node curren
     //Expand the current node (add all unvisited neighbors to the open list)
     std::vector<Model::Node> neighbors = Find_Neighbors(current_node);
 
-    Model::Node open_node;
-
     for (auto neighbor : neighbors)
     {
-        //Buid an Node object
-        open_node = neighbor;
-        //open_node.node.parent_index = current_node.node.index;
         m_Model.parents[neighbor.index] = current_node.index;
-        open_node.g_value = current_node.g_value + current_node.distance(neighbor);
+        neighbor.g_value = current_node.g_value + current_node.distance(neighbor);
 
         //Add the neighbor to the open list.
-        openlist.emplace_back(open_node);
-        m_Model.Nodes()[open_node.index].visited = true;
+        openlist.emplace_back(neighbor);
+        m_Model.Nodes()[neighbor.index].visited = true;
     }
 }
 
@@ -120,7 +101,6 @@ void Search::Calculate_H_Value(Model::Node end)
     for(auto &node: m_Model.Nodes()) {
         h_value = std::sqrt(std::pow((end.x - node.x),2)+ std::pow((end.y - node.y),2));
         node.h_value = h_value;
-
     }
 }
 
@@ -151,4 +131,21 @@ std::vector<Model::Node > Search::Find_Neighbors(Model::Node currentPosition)
 
     }
     return neighbors;
+}
+
+std::vector<Model::Node> Search::Create_Path_Found(Model::Node current_node) {
+    // Create path_found vector
+    distance = 0.0f;
+    std::vector<Model::Node> path_found;
+    Model::Node parent;
+
+    while (current_node.x != start.x && current_node.y != start.y) {
+        path_found.push_back(current_node);
+        int parent_index = m_Model.parents[current_node.index];
+        parent = m_Model.Nodes()[parent_index];
+        distance += current_node.distance(parent);
+        current_node = parent;
+    }
+    path_found.push_back(current_node);
+    return path_found;
 }
