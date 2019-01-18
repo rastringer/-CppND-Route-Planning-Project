@@ -14,6 +14,7 @@ Search::Search(Model &model ):
 
     m_Model.start_position = start;
     m_Model.end_position = end;
+    m_Model.parents.assign(m_Model.Nodes().size() ,-1);
     std::vector<OpenNode> openlist;
 
     //Call A* algorithm
@@ -55,23 +56,35 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
     {
         //Select the best node to explore next.
         current_node = Next_Node(openlist, current_node);
-        m_Model.Nodes()[current_node.node.index].visited = true;
-        m_Model.path.push_back(current_node.node);
+        //m_Model.Nodes()[current_node.node.index].visited = true;
 
         //Check if the node selected is the goal.
         if(current_node.node.x == end.x && current_node.node.y == end.y )
         {
             std::cout<<"Hooray for you!"<<std::endl;
             distance = 0.0f;
+            std::vector<Model::Node> path_found;
 
+            Model::Node curr = current_node.node;
+            Model::Node parent;
+            while (curr.x != start.x && curr.y != start.y) {
+                path_found.push_back(curr);
+                parent = m_Model.Nodes()[m_Model.parents[curr.index]];
+                distance += curr.distance(parent);
+                curr = parent;
+            }
+            path_found.push_back(curr);
+
+            /*
             Model::Node curr = m_Model.path.front();
             for (auto node : m_Model.path){
                 distance += node.distance(curr);
                 curr = node;
 
             }
+            */
             std::cout<<"distance: " << distance <<"\n";
-            return m_Model.path;
+            return path_found;
         }
         AddNeighbors(openlist, current_node);
 
@@ -93,11 +106,13 @@ void Search::AddNeighbors(std::vector<OpenNode> &openlist, OpenNode current_node
     {
         //Buid an OpenNode object
         open_node.node = neighbor;
-        open_node.node.parent_index = current_node.node.index;
+        //open_node.node.parent_index = current_node.node.index;
+        m_Model.parents[neighbor.index] = current_node.node.index;
         open_node.node.g_value = current_node.node.g_value + current_node.node.distance(neighbor);
 
         //Add the neighbor to the open list.
         openlist.emplace_back(open_node);
+        m_Model.Nodes()[open_node.node.index].visited = true;
     }
 }
 

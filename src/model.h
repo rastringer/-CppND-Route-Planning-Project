@@ -79,9 +79,8 @@ public:
     Node start_position;
     Node end_position;
     Node next_position;
-
-    std::vector<Node> neighbors;
     std::vector<Node> path;
+    std::vector<int> parents;
     
 
     
