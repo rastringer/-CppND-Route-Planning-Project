@@ -15,21 +15,21 @@ Search::Search(Model &model ):
     m_Model.start_position = start;
     m_Model.end_position = end;
     m_Model.parents.assign(m_Model.Nodes().size() ,-1);
-    std::vector<OpenNode> openlist;
+    std::vector<Model::Node> openlist;
 
     //Call A* algorithm
     m_Model.path = A_Star(openlist);
 
 }
 
-std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
+std::vector<Model::Node> Search::A_Star(std::vector<Model::Node> &openlist){
 
     /*
     TODO:
-    1. Create a new object of type OpenNode.
+    1. Create a new object of type Node.
     2. Assign the node member to the start node.
     3. Initialize an empty vector, for the open nodes.
-    4. Insert into the open list, the OpenNode.
+    4. Insert into the open list, the Node.
     5. Initilize the g value.
     6. Calculate the h value for all the nodes.
     7. As long as there is nodes in the open list, keep looking at the nodes
@@ -43,13 +43,8 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
     */
 
 
-
-
-    OpenNode open_node;
-    open_node.node = start;
-
-    openlist.emplace_back(open_node);
-    OpenNode current_node = openlist.back();
+    openlist.emplace_back(start);
+    Model::Node current_node = openlist.back();
 
     /*Expand nodes until you reach the goal. Use heuristic to prioritize what node to open first*/
     while (openlist.size() > 0)
@@ -59,13 +54,13 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
         //m_Model.Nodes()[current_node.node.index].visited = true;
 
         //Check if the node selected is the goal.
-        if(current_node.node.x == end.x && current_node.node.y == end.y )
+        if(current_node.x == end.x && current_node.y == end.y )
         {
             std::cout<<"Hooray for you!"<<std::endl;
             distance = 0.0f;
             std::vector<Model::Node> path_found;
 
-            Model::Node curr = current_node.node;
+            Model::Node curr = current_node;
             Model::Node parent;
             while (curr.x != start.x && curr.y != start.y) {
                 path_found.push_back(curr);
@@ -75,14 +70,6 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
             }
             path_found.push_back(curr);
 
-            /*
-            Model::Node curr = m_Model.path.front();
-            for (auto node : m_Model.path){
-                distance += node.distance(curr);
-                curr = node;
-
-            }
-            */
             std::cout<<"distance: " << distance <<"\n";
             return path_found;
         }
@@ -96,32 +83,32 @@ std::vector<Model::Node> Search::A_Star(std::vector<OpenNode> &openlist){
     return {};
 }
 
-void Search::AddNeighbors(std::vector<OpenNode> &openlist, OpenNode current_node) {
+void Search::AddNeighbors(std::vector<Model::Node> &openlist, Model::Node current_node) {
     //Expand the current node (add all unvisited neighbors to the open list)
-    std::vector<Model::Node> neighbors = Find_Neighbors(current_node.node);
+    std::vector<Model::Node> neighbors = Find_Neighbors(current_node);
 
-    OpenNode open_node;
+    Model::Node open_node;
 
     for (auto neighbor : neighbors)
     {
-        //Buid an OpenNode object
-        open_node.node = neighbor;
+        //Buid an Node object
+        open_node = neighbor;
         //open_node.node.parent_index = current_node.node.index;
-        m_Model.parents[neighbor.index] = current_node.node.index;
-        open_node.node.g_value = current_node.node.g_value + current_node.node.distance(neighbor);
+        m_Model.parents[neighbor.index] = current_node.index;
+        open_node.g_value = current_node.g_value + current_node.distance(neighbor);
 
         //Add the neighbor to the open list.
         openlist.emplace_back(open_node);
-        m_Model.Nodes()[open_node.node.index].visited = true;
+        m_Model.Nodes()[open_node.index].visited = true;
     }
 }
 
-OpenNode Search::Next_Node(std::vector<OpenNode>&openlist, OpenNode current_node){
+Model::Node Search::Next_Node(std::vector<Model::Node>&openlist, Model::Node current_node){
     std::sort(openlist.begin(), openlist.end(), [](const auto &_1st, const auto &_2nd){
-        return _1st.node.h_value + _1st.node.g_value < _2nd.node.h_value + _2nd.node.g_value;
+        return _1st.h_value + _1st.g_value < _2nd.h_value + _2nd.g_value;
     });
 
-    OpenNode lowest_node = openlist.front();
+    Model::Node lowest_node = openlist.front();
     openlist.erase(openlist.begin());
     return lowest_node;
 }
