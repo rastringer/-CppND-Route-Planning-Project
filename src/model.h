@@ -62,7 +62,6 @@ public:
     Model( const std::vector<std::byte> &xml );
     
     auto MetricScale() const noexcept { return m_MetricScale; }    
-    
     auto &Nodes() { return m_Nodes; }
     auto &Intersections() const noexcept { return shared_Nodes; }
     auto &Ways() const noexcept { return m_Ways; }
@@ -73,8 +72,10 @@ public:
     auto &Landuses() const noexcept { return m_Landuses; }
     auto &Railways() const noexcept { return m_Railways; }
     
-    int pos_Node_start;
-    int pos_Node_end;
+    int start_x;
+    int start_y;
+    int end_x;
+    int end_y;
 
     Node start_position;
     Node end_position;
