@@ -4,20 +4,64 @@
 #include <set>
 
 
-Search::Search(Model &model ):
+Search::Search(Model &model):
     m_Model(model)
 {
     /*Set start and end points*/
-    end = m_Model.Nodes()[m_Model.Ways()[6].nodes[0]];
-    Calculate_H_Value(end);
-    start = m_Model.Nodes()[m_Model.Ways()[0].nodes[0]];
+    //end = m_Model.Nodes()[m_Model.Ways()[6].nodes[0]];
+    //start = m_Model.Nodes()[m_Model.Ways()[0].nodes[0]];
 
+    bool user_input = true;
+
+    if (user_input) {
+        start.x = m_Model.start_x/m_Model.MetricScale();
+        start.y = m_Model.start_y/m_Model.MetricScale();
+        end.x = m_Model.end_x/m_Model.MetricScale();
+        end.y = m_Model.end_y/m_Model.MetricScale();
+
+        start = m_Model.FindClosestNode(start);
+        end = m_Model.FindClosestNode(end);
+        
+        std::cout << "Start x: " << start.x << "\n";
+        std::cout << "Start y: " << start.y << "\n";
+        std::cout << "Start index: " << start.index << "\n";
+        std::cout << "Start id: " << start.id << "\n";
+        std::cout << "End x: " << end.x << "\n";
+        std::cout << "End y: " << end.y << "\n";
+        std::cout << "End index: " << end.index << "\n";
+        std::cout << "End id: " << end.id << "\n";
+    } else {
+    
+        end = m_Model.Nodes()[m_Model.Ways()[6].nodes[0]];
+        start = m_Model.Nodes()[m_Model.Ways()[0].nodes[0]];
+        std::cout << "Working Start node: " << m_Model.Nodes()[33].way_nums[0] << "\n";
+        std::cout << "Working End node: " << m_Model.Nodes()[87].way_nums[0] << "\n";
+        std::cout << "Working Start way type_hwy: " << m_Model.Ways()[m_Model.Nodes()[33].way_nums[0]].type_highway << "\n";
+        std::cout << "Working End way type_hwy: " << m_Model.Ways()[m_Model.Nodes()[87].way_nums[0]].type_highway << "\n";
+
+        std::cout << "Not Working Start node info: " << "\n";
+        for (auto way_num: m_Model.Nodes()[6973].way_nums) {
+            std::cout << "Not Working Start way type_hwy: " << m_Model.Ways()[way_num].type_highway << "\n";
+        }
+        std::cout << "Not Working End node info: " << "\n";
+        for (auto way_num: m_Model.Nodes()[6629].way_nums) {
+            std::cout << "Not Working End way type_hwy: " << m_Model.Ways()[way_num].type_highway << "\n";
+        }
+        std::cout << "Start id: " << start.id << "\n";
+        std::cout << "End id: " << end.id << "\n";
+    }
+
+
+    Calculate_H_Value(end);
     m_Model.start_position = start;
     m_Model.end_position = end;
     m_Model.parents.assign(m_Model.Nodes().size() ,-1);
     
     //Call A* algorithm
+
     m_Model.path = A_Star();
+    //m_Model.path.emplace_back(start);
+    //m_Model.path.emplace_back(end);
 
 }
 
@@ -42,6 +86,7 @@ std::vector<Model::Node> Search::A_Star(){
     */
 
     std::vector<Model::Node> openlist;
+    m_Model.Nodes()[start.index].visited = true;
     openlist.emplace_back(start);
     Model::Node current_node = openlist.back();
 
@@ -123,7 +168,7 @@ std::vector<Model::Node > Search::Find_Neighbors(Model::Node currentPosition)
 {
     std::vector<Model::Node > neighbors= {};
 
-    for(auto way_num : currentPosition.way_num)
+    for(auto way_num : currentPosition.way_nums)
     {
         Model::Node new_neighbor = Find_Neighbor(m_Model.Ways()[way_num], currentPosition);
         if(new_neighbor.id != "")

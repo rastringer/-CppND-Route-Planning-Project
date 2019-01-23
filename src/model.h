@@ -12,7 +12,7 @@ class Model
 public:
     struct Node {
         std::string id = "";
-        std::vector<int> way_num;
+        std::vector<int> way_nums;
         int index;
         int parent_index = -1;
         float x = 0.f;
@@ -71,11 +71,14 @@ public:
     auto &Waters() const noexcept { return m_Waters; }
     auto &Landuses() const noexcept { return m_Landuses; }
     auto &Railways() const noexcept { return m_Railways; }
+    Node &FindClosestNode(Node);
     
     int start_x;
     int start_y;
     int end_x;
     int end_y;
+    double min_x;
+    double min_y;
 
     Node start_position;
     Node end_position;

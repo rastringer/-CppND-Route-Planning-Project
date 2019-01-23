@@ -50,6 +50,33 @@ Model::Model( const std::vector<std::byte> &xml )
     Get_shared_nodes();
 }
 
+Model::Node & Model::FindClosestNode(Model::Node in_node) {
+    float min_dist = std::numeric_limits<float>::max();
+    float dist;
+    int closest_idx;
+    bool on_road = false;
+    for (const auto &node: m_Nodes) {
+        // Search through ways that this node is a part of, 
+        // and check that at least one is a road.
+        for (auto way_num: node.way_nums) {
+            std::string type_highway = m_Ways[way_num].type_highway;
+            if (!type_highway.empty() && type_highway != "footway") {
+                on_road = true;
+                break;
+            }
+        }
+        if (on_road) {
+            dist = in_node.distance(node);
+            if (dist < min_dist) {
+                closest_idx = node.index;
+                min_dist = dist;
+            }
+        }
+        on_road = false;
+    }
+    return m_Nodes[closest_idx];
+};
+
 void Model::LoadData(const std::vector<std::byte> &xml)
 {
     using namespace pugi;
@@ -95,7 +122,7 @@ void Model::LoadData(const std::vector<std::byte> &xml)
                 if( auto it = node_id_to_num.find(ref); it != end(node_id_to_num) )
                     new_way.nodes.emplace_back(it->second);
                     new_way.id_nodes.emplace_back(ref);
-                    m_Nodes[node_id_to_num.find(ref)->second].way_num.emplace_back(way_num);
+                    m_Nodes[node_id_to_num.find(ref)->second].way_nums.emplace_back(way_num);
 
 
             }
@@ -196,8 +223,12 @@ void Model::AdjustCoordinates()
     const auto lon2xm = [&](double lon) { return lon * deg_to_rad / 2 * earth_radius; };
     const auto dx = lon2xm(m_MaxLon) - lon2xm(m_MinLon);
     const auto dy = lat2ym(m_MaxLat) - lat2ym(m_MinLat);
+    std::cout << "Max lat and lon: " << m_MaxLat << ", " << m_MaxLon << "\n";
+    std::cout << "Min lat and lon: " << m_MinLat << ", " << m_MinLon << "\n";
     const auto min_y = lat2ym(m_MinLat);
     const auto min_x = lon2xm(m_MinLon);
+    std::cout << "Min x and y: " << min_x << ", " << min_y << "\n";
+    std::cout << "dx and dy: " << dx << ", " << dy << "\n";
     m_MetricScale = std::min(dx, dy);
     for( auto &node: m_Nodes ) {
         node.x = (lon2xm(node.x) - min_x) / m_MetricScale;
