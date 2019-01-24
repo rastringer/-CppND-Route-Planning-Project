@@ -46,8 +46,6 @@ Model::Model( const std::vector<std::byte> &xml )
     std::sort(m_Roads.begin(), m_Roads.end(), [](const auto &_1st, const auto &_2nd){
         return (int)_1st.type < (int)_2nd.type;
     });
-
-    Get_shared_nodes();
 }
 
 Model::Node & Model::FindClosestNode(Model::Node in_node) {
@@ -65,7 +63,7 @@ Model::Node & Model::FindClosestNode(Model::Node in_node) {
                 break;
             }
         }
-        if (on_road) {
+        if (on_road && node.x > 0 && node.y > 0) {
             dist = in_node.distance(node);
             if (dist < min_dist) {
                 closest_idx = node.index;
@@ -223,12 +221,8 @@ void Model::AdjustCoordinates()
     const auto lon2xm = [&](double lon) { return lon * deg_to_rad / 2 * earth_radius; };
     const auto dx = lon2xm(m_MaxLon) - lon2xm(m_MinLon);
     const auto dy = lat2ym(m_MaxLat) - lat2ym(m_MinLat);
-    std::cout << "Max lat and lon: " << m_MaxLat << ", " << m_MaxLon << "\n";
-    std::cout << "Min lat and lon: " << m_MinLat << ", " << m_MinLon << "\n";
     const auto min_y = lat2ym(m_MinLat);
     const auto min_x = lon2xm(m_MinLon);
-    std::cout << "Min x and y: " << min_x << ", " << min_y << "\n";
-    std::cout << "dx and dy: " << dx << ", " << dy << "\n";
     m_MetricScale = std::min(dx, dy);
     for( auto &node: m_Nodes ) {
         node.x = (lon2xm(node.x) - min_x) / m_MetricScale;
@@ -321,36 +315,4 @@ void Model::BuildRings( Multipolygon &mp )
 
     process(mp.outer);
     process(mp.inner);
-}
-
-
-void Model::Get_shared_nodes(){
-
-    for(auto node : m_Nodes)
-    {
-       std::string id = node.id;
-       int counter_way = 0;
-
-        std::vector<std::string> temp;
-       for(auto way :  m_Ways)
-        {
-
-            if(true){
-                std::vector<std::string>::iterator it;
-                it = find (way.id_nodes.begin(), way.id_nodes.end(), id);
-
-                if (it != way.id_nodes.end())
-                {
-                    temp.emplace_back(id);
-
-                }
-
-                counter_way++;
-            }
-
-        }
-        if (temp.size()>0){shared_Nodes.emplace_back(node);}
-    }
-
-
 }

@@ -51,7 +51,7 @@ int main(int argc, const char **argv)
     }
     
     Model model{osm_data};
-    std::cout << "The max x and y values on the map are: " << model.MetricScale() << "\n";
+    std::cout << "The map coordinates begin at (0,0) in the lower left, and the max value for x and y is: " << model.MetricScale() << "\n";
     std::cout << "Enter a start x: ";
     std::cin >> model.start_x;
     std::cout << "Enter a start y: ";
