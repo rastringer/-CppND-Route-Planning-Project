@@ -50,7 +50,16 @@ int main(int argc, const char **argv)
             osm_data = std::move(*data);
     }
     
-    Model model{osm_data};  
+    Model model{osm_data};
+    std::cout << "The map coordinates begin at (0,0) in the lower left, and the max value for x and y is: " << model.MetricScale() << "\n";
+    std::cout << "Enter a start x: ";
+    std::cin >> model.start_x;
+    std::cout << "Enter a start y: ";
+    std::cin >> model.start_y;
+    std::cout << "Enter an end x: ";
+    std::cin >> model.end_x;
+    std::cout << "Enter an end y: ";
+    std::cin >> model.end_y;
     Search search{model};
     Render render{model};
 
@@ -61,5 +70,5 @@ int main(int argc, const char **argv)
     display.draw_callback([&](io2d::output_surface& surface){
         render.Display(surface);
     });
-    display.begin_show();  
+    display.begin_show();
 }

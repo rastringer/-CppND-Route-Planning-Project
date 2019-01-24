@@ -46,8 +46,33 @@ Model::Model( const std::vector<std::byte> &xml )
     std::sort(m_Roads.begin(), m_Roads.end(), [](const auto &_1st, const auto &_2nd){
         return (int)_1st.type < (int)_2nd.type;
     });
+}
 
-    Get_shared_nodes();
+Model::Node & Model::FindClosestNode(Model::Node in_node) {
+    float min_dist = std::numeric_limits<float>::max();
+    float dist;
+    int closest_idx;
+    bool on_road = false;
+    for (const auto &node: m_Nodes) {
+        // Search through ways that this node is a part of, 
+        // and check that at least one is a road.
+        for (auto way_num: node.way_nums) {
+            std::string type_highway = m_Ways[way_num].type_highway;
+            if (!type_highway.empty() && type_highway != "footway") {
+                on_road = true;
+                break;
+            }
+        }
+        if (on_road && node.x > 0 && node.y > 0) {
+            dist = in_node.distance(node);
+            if (dist < min_dist) {
+                closest_idx = node.index;
+                min_dist = dist;
+            }
+        }
+        on_road = false;
+    }
+    return m_Nodes[closest_idx];
 }
 
 void Model::LoadData(const std::vector<std::byte> &xml)
@@ -95,7 +120,7 @@ void Model::LoadData(const std::vector<std::byte> &xml)
                 if( auto it = node_id_to_num.find(ref); it != end(node_id_to_num) )
                     new_way.nodes.emplace_back(it->second);
                     new_way.id_nodes.emplace_back(ref);
-                    m_Nodes[node_id_to_num.find(ref)->second].way_num.emplace_back(way_num);
+                    m_Nodes[node_id_to_num.find(ref)->second].way_nums.emplace_back(way_num);
 
 
             }
@@ -290,36 +315,4 @@ void Model::BuildRings( Multipolygon &mp )
 
     process(mp.outer);
     process(mp.inner);
-}
-
-
-void Model::Get_shared_nodes(){
-
-    for(auto node : m_Nodes)
-    {
-       std::string id = node.id;
-       int counter_way = 0;
-
-        std::vector<std::string> temp;
-       for(auto way :  m_Ways)
-        {
-
-            if(true){
-                std::vector<std::string>::iterator it;
-                it = find (way.id_nodes.begin(), way.id_nodes.end(), id);
-
-                if (it != way.id_nodes.end())
-                {
-                    temp.emplace_back(id);
-
-                }
-
-                counter_way++;
-            }
-
-        }
-        if (temp.size()>0){shared_Nodes.emplace_back(node);}
-    }
-
-
 }

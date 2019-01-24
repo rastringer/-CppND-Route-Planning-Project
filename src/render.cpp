@@ -27,7 +27,7 @@ void Render::Display( io2d::output_surface &surface )
     DrawRailways(surface);
     DrawHighways(surface);    
     DrawBuildings(surface);  
-    DrawPath(surface);   
+    DrawPath(surface);
     DrawStartPosition(surface);   
     DrawEndPosition(surface);
 }

@@ -12,7 +12,7 @@ class Model
 public:
     struct Node {
         std::string id = "";
-        std::vector<int> way_num;
+        std::vector<int> way_nums;
         int index;
         int parent_index = -1;
         float x = 0.f;
@@ -22,7 +22,7 @@ public:
         bool visited = false;
 
         float distance(Node other) {
-            return std::sqrt(std::pow((x - other.x),2)+ std::pow((y - other.y),2));
+            return std::sqrt(std::pow((x - other.x),2) + std::pow((y - other.y),2));
         }
     };
     
@@ -62,9 +62,7 @@ public:
     Model( const std::vector<std::byte> &xml );
     
     auto MetricScale() const noexcept { return m_MetricScale; }    
-    
     auto &Nodes() { return m_Nodes; }
-    auto &Intersections() const noexcept { return shared_Nodes; }
     auto &Ways() const noexcept { return m_Ways; }
     auto &Roads() const noexcept { return m_Roads; }
     auto &Buildings() const noexcept { return m_Buildings; }
@@ -72,18 +70,20 @@ public:
     auto &Waters() const noexcept { return m_Waters; }
     auto &Landuses() const noexcept { return m_Landuses; }
     auto &Railways() const noexcept { return m_Railways; }
+    Node &FindClosestNode(Node);
     
-    int pos_Node_start;
-    int pos_Node_end;
+    int start_x;
+    int start_y;
+    int end_x;
+    int end_y;
+    double min_x;
+    double min_y;
 
     Node start_position;
     Node end_position;
     Node next_position;
     std::vector<Node> path;
     std::vector<int> parents;
-    
-
-    
     
 private:
     void AdjustCoordinates();
@@ -92,7 +92,6 @@ private:
     void Get_shared_nodes();
     
     std::vector<Node> m_Nodes;
-    std::vector<Node> shared_Nodes;
     std::vector<Way> m_Ways;
     std::vector<Road> m_Roads;
     std::vector<Railway> m_Railways;
