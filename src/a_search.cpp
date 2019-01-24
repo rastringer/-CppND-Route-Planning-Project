@@ -9,10 +9,7 @@ Search::Search(Model &model): m_Model(model) {
     //m_Model.start_node = m_Model.Nodes()[m_Model.Ways()[6].nodes[0]];
     //m_Model.end_node = m_Model.Nodes()[m_Model.Ways()[0].nodes[0]];
 
-    start = m_Model.start_node;
-    end = m_Model.end_node;
-
-    CalculateHValue(end);
+    CalculateHValues(m_Model.end_node);
     m_Model.parents.assign(m_Model.Nodes().size() ,-1);
     
     //Call A* algorithm
@@ -24,8 +21,8 @@ std::vector<Model::Node> Search::AStar(){
 
     // Initialize open_list with starting node.
     std::vector<Model::Node> open_list;
-    m_Model.Nodes()[start.index].visited = true;
-    open_list.emplace_back(start);
+    m_Model.Nodes()[m_Model.start_node.index].visited = true;
+    open_list.emplace_back(m_Model.start_node);
     Model::Node current_node = open_list.back();
 
     // Expand nodes until you reach the goal. Use heuristic to prioritize what node to open first.
@@ -34,7 +31,7 @@ std::vector<Model::Node> Search::AStar(){
         current_node = NextNode(open_list, current_node);
 
         //Check if the node selected is the goal.
-        if(current_node.x == end.x && current_node.y == end.y ) {
+        if(current_node.x == m_Model.end_node.x && current_node.y == m_Model.end_node.y ) {
             std::cout<<"Hooray for you!"<<std::endl;
             std::vector<Model::Node> path_found = CreatePathFound(current_node); 
             std::cout<<"distance: " << distance <<"\n";
@@ -73,7 +70,7 @@ Model::Node Search::NextNode(std::vector<Model::Node>&open_list, Model::Node cur
 }
 
 
-void Search::CalculateHValue(Model::Node end) {
+void Search::CalculateHValues(Model::Node end) {
     float h_value;
     for(auto &node: m_Model.Nodes()) {
         h_value = std::sqrt(std::pow((end.x - node.x),2)+ std::pow((end.y - node.y),2));
@@ -113,7 +110,7 @@ std::vector<Model::Node> Search::CreatePathFound(Model::Node current_node) {
     std::vector<Model::Node> path_found;
     Model::Node parent;
 
-    while (current_node.x != start.x && current_node.y != start.y) {
+    while (current_node.x != m_Model.start_node.x && current_node.y != m_Model.start_node.y) {
         path_found.push_back(current_node);
         int parent_index = m_Model.parents[current_node.index];
         parent = m_Model.Nodes()[parent_index];

@@ -11,15 +11,12 @@ public:
     Search( Model &model );
     float GetDistance() const { return distance; };
     void AddNeighbors(std::vector<Model::Node> &openList, Model::Node current_node);
-    void CalculateHValue(Model::Node end);
+    void CalculateHValues(Model::Node end);
     Model::Node FindNeighbor(Model::Way way, Model::Node currentPosition);
     Model::Node NextNode(std::vector<Model::Node>&openlist, Model::Node current_node);
     std::vector<Model::Node> AStar();
     std::vector<Model::Node> FindNeighbors(Model::Node currentPosition);
     std::vector<Model::Node> CreatePathFound(Model::Node);
-
-    Model::Node start;
-    Model::Node end;
     
 private:
     Model &m_Model;
