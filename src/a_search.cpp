@@ -6,22 +6,13 @@
 
 Search::Search(Model &model): m_Model(model) {
     /*Set start and end points*/
-    //end = m_Model.Nodes()[m_Model.Ways()[6].nodes[0]];
-    //start = m_Model.Nodes()[m_Model.Ways()[0].nodes[0]];
+    //m_Model.start_node = m_Model.Nodes()[m_Model.Ways()[6].nodes[0]];
+    //m_Model.end_node = m_Model.Nodes()[m_Model.Ways()[0].nodes[0]];
 
-    bool user_input = true;
-
-    start.x = m_Model.start_x/m_Model.MetricScale();
-    start.y = m_Model.start_y/m_Model.MetricScale();
-    end.x = m_Model.end_x/m_Model.MetricScale();
-    end.y = m_Model.end_y/m_Model.MetricScale();
-
-    start = m_Model.FindClosestNode(start);
-    end = m_Model.FindClosestNode(end);
+    start = m_Model.start_node;
+    end = m_Model.end_node;
 
     CalculateHValue(end);
-    m_Model.start_position = start;
-    m_Model.end_position = end;
     m_Model.parents.assign(m_Model.Nodes().size() ,-1);
     
     //Call A* algorithm

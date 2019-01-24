@@ -47,7 +47,7 @@ void Render::DrawEndPosition(io2d::output_surface &surface) const{
     auto pb = io2d::path_builder{}; 
     pb.matrix(m_Matrix);
 
-    pb.new_figure({m_Model.end_position.x, m_Model.end_position.y});
+    pb.new_figure({m_Model.end_node.x, m_Model.end_node.y});
     float constexpr l_marker = 0.01f;
     pb.rel_line({l_marker, 0.f});
     pb.rel_line({0.f, l_marker});
@@ -67,7 +67,7 @@ void Render::DrawStartPosition(io2d::output_surface &surface) const{
     auto pb = io2d::path_builder{}; 
     pb.matrix(m_Matrix);
 
-    pb.new_figure({m_Model.start_position.x, m_Model.start_position.y});
+    pb.new_figure({m_Model.start_node.x, m_Model.start_node.y});
     float constexpr l_marker = 0.01f;
     pb.rel_line({l_marker, 0.f});
     pb.rel_line({0.f, l_marker});
