@@ -22,7 +22,7 @@ Search::Search(Model &model):
         start = m_Model.FindClosestNode(start);
         end = m_Model.FindClosestNode(end);
         
-        std::cout << "Start x: " << start.x << "\n";
+        std::cout << "Start x: " << start.x << "\n"; 
         std::cout << "Start y: " << start.y << "\n";
         std::cout << "Start index: " << start.index << "\n";
         std::cout << "Start id: " << start.id << "\n";
