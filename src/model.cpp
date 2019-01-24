@@ -73,7 +73,7 @@ Model::Node & Model::FindClosestNode(Model::Node in_node) {
         on_road = false;
     }
     return m_Nodes[closest_idx];
-};
+}
 
 void Model::LoadData(const std::vector<std::byte> &xml)
 {
