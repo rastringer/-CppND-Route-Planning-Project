@@ -8,8 +8,7 @@ Search::Search(Model &model): m_Model(model) {
     /*Set start and end points*/
     //m_Model.start_node = m_Model.Nodes()[m_Model.Ways()[6].nodes[0]];
     //m_Model.end_node = m_Model.Nodes()[m_Model.Ways()[0].nodes[0]];
-
-    CalculateHValues(m_Model.end_node);
+    
     m_Model.parents.assign(m_Model.Nodes().size() ,-1);
     
     //Call A* algorithm
@@ -67,15 +66,6 @@ Model::Node Search::NextNode(std::vector<Model::Node>&open_list, Model::Node cur
     Model::Node lowest_node = open_list.front();
     open_list.erase(open_list.begin());
     return lowest_node;
-}
-
-
-void Search::CalculateHValues(Model::Node end) {
-    float h_value;
-    for(auto &node: m_Model.Nodes()) {
-        h_value = std::sqrt(std::pow((end.x - node.x),2)+ std::pow((end.y - node.y),2));
-        node.h_value = h_value;
-    }
 }
 
 

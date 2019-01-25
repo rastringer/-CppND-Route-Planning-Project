@@ -48,9 +48,18 @@ Model::Model(const std::vector<std::byte> &xml, float start_x, float start_y, fl
     end_y *= 0.01;
     start_node = FindClosestNode(start_x, start_y);
     end_node = FindClosestNode(end_x, end_y);
+    CalculateHValues(end_node);
     std::sort(m_Roads.begin(), m_Roads.end(), [](const auto &_1st, const auto &_2nd){
         return (int)_1st.type < (int)_2nd.type;
     });
+}
+
+void Model::CalculateHValues(Model::Node end) {
+    float h_value;
+    for(auto &node: m_Nodes) {
+        h_value = std::sqrt(std::pow((end.x - node.x),2)+ std::pow((end.y - node.y),2));
+        node.h_value = h_value;
+    }
 }
 
 Model::Node & Model::FindClosestNode(float x, float y) {

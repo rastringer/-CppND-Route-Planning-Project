@@ -71,6 +71,7 @@ public:
     auto &Landuses() const noexcept { return m_Landuses; }
     auto &Railways() const noexcept { return m_Railways; }
     Node &FindClosestNode(float x, float y);
+    void CalculateHValues(Node end_node);
     
     double min_x;
     double min_y;
