@@ -50,24 +50,19 @@ int main(int argc, const char **argv)
             osm_data = std::move(*data);
     }
     
+    // Get user input.
+    float start_x, start_y, end_x, end_y;
+    std::cout << "The map coordinates begin at (0,0) in the lower left corner, and end at (100, 100) in the upper right." << "\n";
+    std::cout << "Enter a start x between 0 and 100: ";
+    std::cin >> start_x;
+    std::cout << "Enter a start y betwen 0 and 100: ";
+    std::cin >> start_y;
+    std::cout << "Enter an end x between 0 and 100: ";
+    std::cin >> end_x;
+    std::cout << "Enter an end y between 0 and 100: ";
+    std::cin >> end_y;
     // Build Model.
-    Model model{osm_data};
-    std::cout << "The map coordinates begin at (0,0) in the lower left, and the max value for x and y is: " << model.MetricScale() << "\n";
-    std::cout << "Enter a start x: ";
-    std::cin >> model.start_node.x;
-    std::cout << "Enter a start y: ";
-    std::cin >> model.start_node.y;
-    std::cout << "Enter an end x: ";
-    std::cin >> model.end_node.x;
-    std::cout << "Enter an end y: ";
-    std::cin >> model.end_node.y;
-    // Scale node x and y values and find closest matching nodes in Model.
-    model.start_node.x /= model.MetricScale();
-    model.start_node.y /= model.MetricScale();
-    model.end_node.x /= model.MetricScale();
-    model.end_node.y /= model.MetricScale();
-    model.start_node = model.FindClosestNode(model.start_node);
-    model.end_node = model.FindClosestNode(model.end_node);
+    Model model{osm_data, start_x, start_y, end_x, end_y};
 
     // Perform search and render results.
     Search search{model};

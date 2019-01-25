@@ -37,16 +37,26 @@ static Model::Landuse::Type String2LanduseType(std::string_view type)
     return Model::Landuse::Invalid;
 }
 
-Model::Model( const std::vector<std::byte> &xml )
+Model::Model(const std::vector<std::byte> &xml, float start_x, float start_y, float end_x, float end_y)
 {
     LoadData(xml);
     AdjustCoordinates();
+    // Convert inputs to percentage:
+    start_x *= 0.01;
+    start_y *= 0.01;
+    end_x *= 0.01;
+    end_y *= 0.01;
+    start_node = FindClosestNode(start_x, start_y);
+    end_node = FindClosestNode(end_x, end_y);
     std::sort(m_Roads.begin(), m_Roads.end(), [](const auto &_1st, const auto &_2nd){
         return (int)_1st.type < (int)_2nd.type;
     });
 }
 
-Model::Node & Model::FindClosestNode(Model::Node in_node) {
+Model::Node & Model::FindClosestNode(float x, float y) {
+    Node input;
+    input.x = x;
+    input.y = y;
     float min_dist = std::numeric_limits<float>::max();
     float dist;
     int closest_idx;
@@ -62,7 +72,7 @@ Model::Node & Model::FindClosestNode(Model::Node in_node) {
             }
         }
         if (on_road && node.x > 0 && node.y > 0) {
-            dist = in_node.distance(node);
+            dist = input.distance(node);
             if (dist < min_dist) {
                 closest_idx = node.index;
                 min_dist = dist;
