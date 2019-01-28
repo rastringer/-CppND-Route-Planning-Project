@@ -11,6 +11,9 @@ class Model
 {
 public:
     struct Node {
+        Node & FindNeighbor(Model & model, int way_num);
+        void FindNeighbors(Model & model);
+
         std::string id = "";
         std::vector<int> way_nums;
         int index;
@@ -20,10 +23,12 @@ public:
         float h_value = std::numeric_limits<float>::max();
         float g_value = 0.0;
         bool visited = false;
+        std::vector<Node *> neighbors;
 
         float distance(Node other) {
             return std::sqrt(std::pow((x - other.x),2) + std::pow((y - other.y),2));
         }
+
     };
     
     struct Way {

@@ -19,7 +19,7 @@ Search::Search(Model &model): m_Model(model) {
 std::vector<Model::Node> Search::AStar(){
 
     // Initialize open_list with starting node.
-    m_Model.Nodes()[m_Model.start_node.index].visited = true;
+    m_Model.start_node.visited = true;
     open_list.emplace_back(m_Model.start_node);
     Model::Node current_node = open_list.back();
 
@@ -45,15 +45,15 @@ std::vector<Model::Node> Search::AStar(){
 
 void Search::AddNeighbors(Model::Node current_node) {
     //Expand the current node (add all unvisited neighbors to the open list)
-    std::vector<Model::Node> neighbors = FindNeighbors(current_node);
+    current_node.FindNeighbors(m_Model);
 
-    for (auto neighbor : neighbors) {
-        m_Model.parents[neighbor.index] = current_node.index;
-        neighbor.g_value = current_node.g_value + current_node.distance(neighbor);
+    for (auto neighbor : current_node.neighbors) {
+        m_Model.parents[neighbor->index] = current_node.index;
+        neighbor->g_value = current_node.g_value + current_node.distance(*neighbor);
 
         //Add the neighbor to the open list.
-        open_list.emplace_back(neighbor);
-        m_Model.Nodes()[neighbor.index].visited = true;
+        open_list.emplace_back(*neighbor);
+        m_Model.Nodes()[neighbor->index].visited = true;
     }
 }
 
@@ -65,32 +65,6 @@ Model::Node Search::NextNode() {
     Model::Node lowest_node = open_list.front();
     open_list.erase(open_list.begin());
     return lowest_node;
-}
-
-
-Model::Node Search::FindNeighbor(Model::Way way, Model::Node currentPosition){
-    Model::Node closest = {};
-
-    for(int node_index : way.nodes) {
-        Model::Node node = m_Model.Nodes()[node_index];
-        if (node.id != currentPosition.id && !node.visited)
-            if(currentPosition.distance(node) < currentPosition.distance(closest))
-                closest = node;
-    }
-
-    return closest;
-}
-
-std::vector<Model::Node > Search::FindNeighbors(Model::Node currentPosition) {
-    std::vector<Model::Node > neighbors= {};
-
-    for(auto way_num : currentPosition.way_nums) {
-        Model::Node new_neighbor = FindNeighbor(m_Model.Ways()[way_num], currentPosition);
-        if(new_neighbor.id != "")
-            neighbors.emplace_back(new_neighbor);
-
-    }
-    return neighbors;
 }
 
 std::vector<Model::Node> Search::CreatePathFound(Model::Node current_node) {

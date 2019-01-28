@@ -6,6 +6,32 @@
 #include <algorithm>
 #include <assert.h>
 
+Model::Node & Model::Node::FindNeighbor(Model & model, int way_num){
+    Model::Way way = model.Ways()[way_num];
+    Node * closest = nullptr;
+
+    for(int node_index : way.nodes) {
+        Node node = model.Nodes()[node_index];
+        if (node.id != this->id && !node.visited) {
+            if(!closest || this->distance(node) < this->distance(* closest)) {
+                closest = &node;
+            }
+        }
+    }
+
+    return * closest;
+}
+
+void Model::Node::FindNeighbors(Model & model) {
+
+    for(auto way_num : this->way_nums) {
+        Model::Node & new_neighbor = this->FindNeighbor(model, way_num);
+        if(new_neighbor.id != "")
+            this->neighbors.emplace_back(&new_neighbor);
+
+    }
+}
+
 static Model::Road::Type String2RoadType(std::string_view type)
 {
     if( type == "motorway" )        return Model::Road::Motorway;
