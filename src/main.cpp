@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include <io2d.h>
-#include "model.h"
+#include "search_model.h"
 #include "render.h"
 #include "a_search.h"
 
@@ -62,7 +62,7 @@ int main(int argc, const char **argv)
     std::cout << "Enter an end y between 0 and 100: ";
     std::cin >> end_y;
     // Build Model.
-    Model model{osm_data, start_x, start_y, end_x, end_y};
+    SearchModel model{osm_data, start_x, start_y, end_x, end_y};
 
     // Perform search and render results.
     Search search{model};

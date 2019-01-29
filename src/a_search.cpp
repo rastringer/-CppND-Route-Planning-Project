@@ -4,7 +4,7 @@
 #include <set>
 
 
-Search::Search(Model &model): m_Model(model) {
+Search::Search(SearchModel &model): m_Model(model) {
     /*Set start and end points*/
     //m_Model.start_node = m_Model.Nodes()[m_Model.Ways()[6].nodes[0]];
     //m_Model.end_node = m_Model.Nodes()[m_Model.Ways()[0].nodes[0]];
@@ -16,12 +16,12 @@ Search::Search(Model &model): m_Model(model) {
 
 }
 
-std::vector<Model::Node> Search::AStar(){
+std::vector<SearchModel::Node> Search::AStar(){
 
     // Initialize open_list with starting node.
     m_Model.start_node.visited = true;
     open_list.emplace_back(m_Model.start_node);
-    Model::Node current_node = open_list.back();
+    SearchModel::Node current_node = open_list.back();
 
     // Expand nodes until you reach the goal. Use heuristic to prioritize what node to open first.
     while (open_list.size() > 0) {
@@ -31,7 +31,7 @@ std::vector<Model::Node> Search::AStar(){
         //Check if the node selected is the goal.
         if(current_node.x == m_Model.end_node.x && current_node.y == m_Model.end_node.y ) {
             std::cout<<"Hooray for you!"<<std::endl;
-            std::vector<Model::Node> path_found = CreatePathFound(current_node); 
+            std::vector<SearchModel::Node> path_found = CreatePathFound(current_node); 
             std::cout<<"distance: " << distance <<"\n";
             return path_found;
         }
@@ -43,7 +43,7 @@ std::vector<Model::Node> Search::AStar(){
     return {};
 }
 
-void Search::AddNeighbors(Model::Node current_node) {
+void Search::AddNeighbors(SearchModel::Node current_node) {
     //Expand the current node (add all unvisited neighbors to the open list)
     current_node.FindNeighbors(m_Model);
 
@@ -53,30 +53,30 @@ void Search::AddNeighbors(Model::Node current_node) {
 
         //Add the neighbor to the open list.
         open_list.emplace_back(*neighbor);
-        m_Model.Nodes()[neighbor->index].visited = true;
+        m_Model.SNodes()[neighbor->index].visited = true;
     }
 }
 
-Model::Node Search::NextNode() {
+SearchModel::Node Search::NextNode() {
     std::sort(open_list.begin(), open_list.end(), [](const auto &_1st, const auto &_2nd) {
         return _1st.h_value + _1st.g_value < _2nd.h_value + _2nd.g_value;
     });
 
-    Model::Node lowest_node = open_list.front();
+    SearchModel::Node lowest_node = open_list.front();
     open_list.erase(open_list.begin());
     return lowest_node;
 }
 
-std::vector<Model::Node> Search::CreatePathFound(Model::Node current_node) {
+std::vector<SearchModel::Node> Search::CreatePathFound(SearchModel::Node current_node) {
     // Create path_found vector
     distance = 0.0f;
-    std::vector<Model::Node> path_found;
-    Model::Node parent;
+    std::vector<SearchModel::Node> path_found;
+    SearchModel::Node parent;
 
     while (current_node.x != m_Model.start_node.x && current_node.y != m_Model.start_node.y) {
         path_found.push_back(current_node);
         int parent_index = m_Model.parents[current_node.index];
-        parent = m_Model.Nodes()[parent_index];
+        parent = m_Model.SNodes()[parent_index];
         distance += current_node.distance(parent);
         current_node = parent;
     }

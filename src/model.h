@@ -1,40 +1,20 @@
 #pragma once
 
-#include <cstddef>
-#include <limits>
-#include <cmath>
-#include <string>
-#include <unordered_map>
 #include <vector>
+#include <unordered_map>
+#include <string>
+#include <cstddef>
 
 class Model
 {
 public:
     struct Node {
-        Node * FindNeighbor(Model & model, int way_num);
-        void FindNeighbors(Model & model);
-
-        std::string id = "";
-        std::vector<int> way_nums;
-        int index;
-        int parent_index = -1;
-        float x = 0.f;
-        float y = 0.f;
-        float h_value = std::numeric_limits<float>::max();
-        float g_value = 0.0;
-        bool visited = false;
-        std::vector<Node *> neighbors;
-
-        float distance(Node other) {
-            return std::sqrt(std::pow((x - other.x),2) + std::pow((y - other.y),2));
-        }
-
+        double x = 0.f;
+        double y = 0.f;
     };
     
     struct Way {
         std::vector<int> nodes;
-        std::vector<std::string> id_nodes;
-        std::string type_highway;
     };
     
     struct Road {
@@ -64,10 +44,11 @@ public:
         Type type;
     };
     
-    Model(const std::vector<std::byte> &xml, float start_x, float start_y, float end_x, float end_y);
+    Model( const std::vector<std::byte> &xml );
     
     auto MetricScale() const noexcept { return m_MetricScale; }    
-    auto &Nodes() { return m_Nodes; }
+    
+    auto &Nodes() const noexcept { return m_Nodes; }
     auto &Ways() const noexcept { return m_Ways; }
     auto &Roads() const noexcept { return m_Roads; }
     auto &Buildings() const noexcept { return m_Buildings; }
@@ -75,22 +56,11 @@ public:
     auto &Waters() const noexcept { return m_Waters; }
     auto &Landuses() const noexcept { return m_Landuses; }
     auto &Railways() const noexcept { return m_Railways; }
-    Node &FindClosestNode(float x, float y);
-    void CalculateHValues(Node end_node);
-    
-    double min_x;
-    double min_y;
-
-    Node start_node;
-    Node end_node;
-    std::vector<Node> path;
-    std::vector<int> parents;
     
 private:
     void AdjustCoordinates();
     void BuildRings( Multipolygon &mp );
     void LoadData(const std::vector<std::byte> &xml);
-    void Get_shared_nodes();
     
     std::vector<Node> m_Nodes;
     std::vector<Way> m_Ways;
@@ -106,5 +76,4 @@ private:
     double m_MinLon = 0.;
     double m_MaxLon = 0.;
     double m_MetricScale = 1.f;
-
 };

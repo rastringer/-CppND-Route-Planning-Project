@@ -2,22 +2,22 @@
 #include <vector>
 #include <iomanip>
 #include <string>
-#include "model.h"
+#include "search_model.h"
 
 
 class Search
 {
 public:
-    Search( Model &model );
+    Search( SearchModel &model );
     float GetDistance() const {return distance;};
-    void AddNeighbors(Model::Node current_node);
-    Model::Node NextNode();
-    std::vector<Model::Node> AStar();
-    std::vector<Model::Node> CreatePathFound(Model::Node);
+    void AddNeighbors(SearchModel::Node current_node);
+    SearchModel::Node NextNode();
+    std::vector<SearchModel::Node> AStar();
+    std::vector<SearchModel::Node> CreatePathFound(SearchModel::Node);
     
 private:
-    Model &m_Model;
+    SearchModel &m_Model;
     float distance;
-    std::vector<Model::Node> open_list;
+    std::vector<SearchModel::Node> open_list;
 
 };
