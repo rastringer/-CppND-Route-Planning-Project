@@ -34,7 +34,7 @@ class SearchModel : public Model {
         SearchModel(const std::vector<std::byte> &xml, float start_x, float start_y, float end_x, float end_y);
         Node &FindClosestNode(float x, float y);
         void CalculateHValues(Node end_node);
-        auto &SNodes() const noexcept { return m_Nodes; }
+        auto &SNodes() { return m_Nodes; }
 
 
         double min_x;
