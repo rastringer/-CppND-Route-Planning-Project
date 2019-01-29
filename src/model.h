@@ -72,16 +72,11 @@ public:
     auto &Railways() const noexcept { return m_Railways; }
     Node &FindClosestNode(Node);
     
-    int start_x;
-    int start_y;
-    int end_x;
-    int end_y;
     double min_x;
     double min_y;
 
-    Node start_position;
-    Node end_position;
-    Node next_position;
+    Node start_node;
+    Node end_node;
     std::vector<Node> path;
     std::vector<int> parents;
     
