@@ -59,7 +59,7 @@ public:
         Type type;
     };
     
-    Model( const std::vector<std::byte> &xml );
+    Model(const std::vector<std::byte> &xml, float start_x, float start_y, float end_x, float end_y);
     
     auto MetricScale() const noexcept { return m_MetricScale; }    
     auto &Nodes() { return m_Nodes; }
@@ -70,7 +70,8 @@ public:
     auto &Waters() const noexcept { return m_Waters; }
     auto &Landuses() const noexcept { return m_Landuses; }
     auto &Railways() const noexcept { return m_Railways; }
-    Node &FindClosestNode(Node);
+    Node &FindClosestNode(float x, float y);
+    void CalculateHValues(Node end_node);
     
     double min_x;
     double min_y;

@@ -37,16 +37,35 @@ static Model::Landuse::Type String2LanduseType(std::string_view type)
     return Model::Landuse::Invalid;
 }
 
-Model::Model( const std::vector<std::byte> &xml )
+Model::Model(const std::vector<std::byte> &xml, float start_x, float start_y, float end_x, float end_y)
 {
     LoadData(xml);
     AdjustCoordinates();
+    // Convert inputs to percentage:
+    start_x *= 0.01;
+    start_y *= 0.01;
+    end_x *= 0.01;
+    end_y *= 0.01;
+    start_node = FindClosestNode(start_x, start_y);
+    end_node = FindClosestNode(end_x, end_y);
+    CalculateHValues(end_node);
     std::sort(m_Roads.begin(), m_Roads.end(), [](const auto &_1st, const auto &_2nd){
         return (int)_1st.type < (int)_2nd.type;
     });
 }
 
-Model::Node & Model::FindClosestNode(Model::Node in_node) {
+void Model::CalculateHValues(Model::Node end) {
+    float h_value;
+    for(auto &node: m_Nodes) {
+        h_value = std::sqrt(std::pow((end.x - node.x),2)+ std::pow((end.y - node.y),2));
+        node.h_value = h_value;
+    }
+}
+
+Model::Node & Model::FindClosestNode(float x, float y) {
+    Node input;
+    input.x = x;
+    input.y = y;
     float min_dist = std::numeric_limits<float>::max();
     float dist;
     int closest_idx;
@@ -62,7 +81,7 @@ Model::Node & Model::FindClosestNode(Model::Node in_node) {
             }
         }
         if (on_road && node.x > 0 && node.y > 0) {
-            dist = in_node.distance(node);
+            dist = input.distance(node);
             if (dist < min_dist) {
                 closest_idx = node.index;
                 min_dist = dist;
