@@ -6,28 +6,34 @@
 #include <algorithm>
 #include <assert.h>
 
-Model::Node & Model::Node::FindNeighbor(Model & model, int way_num){
+Model::Node * Model::Node::FindNeighbor(Model & model, int way_num){
     Model::Way way = model.Ways()[way_num];
-    Node * closest = nullptr;
+    int closest_index = -1;
+    Node * closest_node = nullptr;
 
     for(int node_index : way.nodes) {
         Node node = model.Nodes()[node_index];
         if (node.id != this->id && !node.visited) {
-            if(!closest || this->distance(node) < this->distance(* closest)) {
-                closest = &node;
+            if(closest_index = -1 || this->distance(node) < this->distance(model.Nodes()[closest_index])) {
+                closest_index = node_index;
             }
         }
     }
 
-    return * closest;
+    if (closest_index != -1) {
+        closest_node = &model.Nodes()[closest_index];
+    }
+
+    return closest_node;
 }
 
 void Model::Node::FindNeighbors(Model & model) {
 
     for(auto way_num : this->way_nums) {
-        Model::Node & new_neighbor = this->FindNeighbor(model, way_num);
-        if(new_neighbor.id != "")
-            this->neighbors.emplace_back(&new_neighbor);
+        Model::Node * new_neighbor = this->FindNeighbor(model, way_num);
+        if(new_neighbor) {
+            this->neighbors.emplace_back(new_neighbor);
+        }
 
     }
 }

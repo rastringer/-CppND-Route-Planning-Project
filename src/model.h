@@ -11,7 +11,7 @@ class Model
 {
 public:
     struct Node {
-        Node & FindNeighbor(Model & model, int way_num);
+        Node * FindNeighbor(Model & model, int way_num);
         void FindNeighbors(Model & model);
 
         std::string id = "";
