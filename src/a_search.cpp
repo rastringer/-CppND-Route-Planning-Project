@@ -5,13 +5,8 @@
 
 
 Search::Search(SearchModel &model): m_Model(model) {
-    /*Set start and end points*/
-    //m_Model.start_node = m_Model.Nodes()[m_Model.Ways()[6].nodes[0]];
-    //m_Model.end_node = m_Model.Nodes()[m_Model.Ways()[0].nodes[0]];
-    
     //Call A* algorithm
     m_Model.path = AStar();
-
 }
 
 std::vector<SearchModel::Node> Search::AStar(){
@@ -30,12 +25,11 @@ std::vector<SearchModel::Node> Search::AStar(){
         if(current_node->x == m_Model.end_node.x && current_node->y == m_Model.end_node.y ) {
             std::cout<<"Hooray for you!"<<std::endl;
             std::vector<SearchModel::Node> path_found = CreatePathFound(current_node); 
-            std::cout<<"distance: " << distance <<"\n";
+            std::cout<<"Distance: " << distance << " meters. \n";
             return path_found;
         }
         AddNeighbors(current_node);
-
-    }  //open_list while loop
+    }
 
     std::cout<<"Didn't find it!"<<std::endl;
     return {};
@@ -43,7 +37,7 @@ std::vector<SearchModel::Node> Search::AStar(){
 
 void Search::AddNeighbors(SearchModel::Node * current_node) {
     //Expand the current node (add all unvisited neighbors to the open list)
-    current_node->FindNeighbors(m_Model);
+    current_node->FindNeighbors();
 
     for (auto neighbor : current_node->neighbors) {
         neighbor->parent = current_node;
@@ -71,8 +65,6 @@ std::vector<SearchModel::Node> Search::CreatePathFound(SearchModel::Node * curre
     std::vector<SearchModel::Node> path_found;
     SearchModel::Node parent;
 
-    //while (current_node.x != m_Model.start_node.x && current_node.y != m_Model.start_node.y) {
-
     while (current_node->parent != nullptr) {
         path_found.push_back(*current_node);
         parent = *(current_node->parent);
@@ -80,5 +72,6 @@ std::vector<SearchModel::Node> Search::CreatePathFound(SearchModel::Node * curre
         current_node = current_node->parent;
     }
     path_found.push_back(*current_node);
+    distance *= m_Model.MetricScale();
     return path_found;
 }

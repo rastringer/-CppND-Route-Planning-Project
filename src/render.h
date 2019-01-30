@@ -2,14 +2,14 @@
 
 #include <unordered_map>
 #include <io2d.h>
-#include "model.h"
+#include "search_model.h"
 
 using namespace std::experimental;
 
 class Render
 {
 public:
-    Render( Model &model );
+    Render(SearchModel &model );
     void Display( io2d::output_surface &surface );
     
 private:
@@ -22,10 +22,15 @@ private:
     void DrawLeisure(io2d::output_surface &surface) const;
     void DrawWater(io2d::output_surface &surface) const;
     void DrawLanduses(io2d::output_surface &surface) const;
+    void DrawStartPosition(io2d::output_surface &surface) const;
+    void DrawEndPosition(io2d::output_surface &surface) const;
+    void DrawPath(io2d::output_surface &surface) const;
     io2d::interpreted_path PathFromWay(const Model::Way &way) const;
     io2d::interpreted_path PathFromMP(const Model::Multipolygon &mp) const;
+    io2d::interpreted_path PathLine() const;
+
     
-    Model &m_Model;
+    SearchModel &m_Model;
     float m_Scale = 1.f;
     float m_PixelsInMeter = 1.f;
     io2d::matrix_2d m_Matrix;

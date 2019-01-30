@@ -18,8 +18,8 @@ class SearchModel : public Model {
                 bool visited = false;
                 std::vector<Node *> neighbors;
 
-                Node * FindNeighbor(SearchModel & model, std::vector<int> node_indices);
-                void FindNeighbors(SearchModel & model);
+                Node * FindNeighbor(std::vector<int> node_indices);
+                void FindNeighbors();
                 float distance(Node other) {
                     return std::sqrt(std::pow((x - other.x),2) + std::pow((y - other.y),2));
                 }
@@ -36,17 +36,15 @@ class SearchModel : public Model {
 
 
         Node &FindClosestNode(float x, float y);
-        void CalculateHValues(Node end_node);
+        void CalculateHValues();
         void CreateNodeToRoadHashmap();
         auto &SNodes() { return m_Nodes; }
-
-
-        //double min_x;
-        //double min_y;
-
-        std::unordered_map<int, std::vector<const Model::Road *>> node_to_road;
+        
         Node start_node;
         Node end_node;
         std::vector<Node> path;
+    
+    private:
+        std::unordered_map<int, std::vector<const Model::Road *>> node_to_road;
         std::vector<Node> m_Nodes;
 };
