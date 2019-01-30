@@ -11,6 +11,9 @@ class SearchRender : public Render {
 
     private:
         SearchModel &m_Model;
+        float m_Scale = 1.f;
+        float m_PixelsInMeter = 1.f;
+        io2d::matrix_2d m_Matrix;
 
         void DrawStartPosition(io2d::output_surface &surface) const;
         void DrawEndPosition(io2d::output_surface &surface) const;
