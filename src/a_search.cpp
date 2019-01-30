@@ -22,7 +22,7 @@ std::vector<SearchModel::Node> Search::AStar(){
         current_node = NextNode();
 
         //Check if the node selected is the goal.
-        if(current_node->x == m_Model.end_node.x && current_node->y == m_Model.end_node.y ) {
+        if(current_node->distance(m_Model.end_node) == 0) {
             std::vector<SearchModel::Node> path_found = CreatePathFound(current_node);
             std::cout<<"Hooray for you!"<<std::endl;
             std::cout<<"Distance: " << distance << " meters. \n";
