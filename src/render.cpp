@@ -27,58 +27,8 @@ void Render::Display( io2d::output_surface &surface )
     DrawRailways(surface);
     DrawHighways(surface);    
     DrawBuildings(surface);  
-    DrawPath(surface);
-    DrawStartPosition(surface);   
-    DrawEndPosition(surface);
 }
 
-void Render::DrawPath(io2d::output_surface &surface) const{
-    io2d::render_props aliased{ io2d::antialias::none };
-    io2d::brush foreBrush{ io2d::rgba_color::orange}; 
-    float width = 5.0f;
-    surface.stroke(foreBrush, PathLine(), std::nullopt, io2d::stroke_props{width});
-
-}
-
-void Render::DrawEndPosition(io2d::output_surface &surface) const{
-    io2d::render_props aliased{ io2d::antialias::none };
-    io2d::brush foreBrush{ io2d::rgba_color::red };
-
-    auto pb = io2d::path_builder{}; 
-    pb.matrix(m_Matrix);
-
-    pb.new_figure({m_Model.end_node.x, m_Model.end_node.y});
-    float constexpr l_marker = 0.01f;
-    pb.rel_line({l_marker, 0.f});
-    pb.rel_line({0.f, l_marker});
-    pb.rel_line({-l_marker, 0.f});
-    pb.rel_line({0.f, -l_marker});
-    pb.close_figure();
-    
-    surface.fill(foreBrush, pb);
-    surface.stroke(foreBrush, io2d::interpreted_path{pb}, std::nullopt, std::nullopt, std::nullopt, aliased);
-
-}
-
-void Render::DrawStartPosition(io2d::output_surface &surface) const{
-    io2d::render_props aliased{ io2d::antialias::none };
-    io2d::brush foreBrush{ io2d::rgba_color::green };
-
-    auto pb = io2d::path_builder{}; 
-    pb.matrix(m_Matrix);
-
-    pb.new_figure({m_Model.start_node.x, m_Model.start_node.y});
-    float constexpr l_marker = 0.01f;
-    pb.rel_line({l_marker, 0.f});
-    pb.rel_line({0.f, l_marker});
-    pb.rel_line({-l_marker, 0.f});
-    pb.rel_line({0.f, -l_marker});
-    pb.close_figure();
-    
-    surface.fill(foreBrush, pb);
-    surface.stroke(foreBrush, io2d::interpreted_path{pb}, std::nullopt, std::nullopt, std::nullopt, aliased);
-
-}
 
 void Render::DrawBuildings(io2d::output_surface &surface) const
 {
@@ -135,23 +85,6 @@ void Render::DrawRailways(io2d::output_surface &surface) const
     }
 }
 
-io2d::interpreted_path Render::PathLine() const
-{    
-    if( m_Model.path.empty() )
-        return {};
-
-    const auto nodes = m_Model.path;    
-    
-    auto pb = io2d::path_builder{};
-    pb.matrix(m_Matrix);
-    pb.new_figure( ToPoint2D( m_Model.path[0]));
-
-    for( int i=1; i< m_Model.path.size();i++ )
-        pb.line( ToPoint2D(m_Model.path[i])); 
-
-      
-    return io2d::interpreted_path{pb};
-}
 
 io2d::interpreted_path Render::PathFromWay(const Model::Way &way) const
 {    

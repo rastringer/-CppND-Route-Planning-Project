@@ -5,7 +5,7 @@
 #include <string>
 #include <io2d.h>
 #include "search_model.h"
-#include "render.h"
+#include "search_render.h"
 #include "a_search.h"
 
 using namespace std::experimental;
@@ -66,7 +66,7 @@ int main(int argc, const char **argv)
 
     // Perform search and render results.
     Search search{model};
-    Render render{model};
+    SearchRender render{model};
 
     auto display = io2d::output_surface{400, 400, io2d::format::argb32, io2d::scaling::none, io2d::refresh_style::fixed, 30};
     display.size_change_callback([](io2d::output_surface& surface){
