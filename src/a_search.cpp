@@ -9,8 +9,7 @@ Search::Search(SearchModel &model): m_Model(model) {
     m_Model.path = AStar();
 }
 
-std::vector<SearchModel::Node> Search::AStar(){
-
+std::vector<SearchModel::Node> Search::AStar() {
     // Initialize open_list with starting node.
     m_Model.start_node.visited = true;
     open_list.emplace_back(&m_Model.start_node);
@@ -18,14 +17,14 @@ std::vector<SearchModel::Node> Search::AStar(){
 
     // Expand nodes until you reach the goal. Use heuristic to prioritize what node to open first.
     while (open_list.size() > 0) {
-        //Select the best node to explore next.
+        // Select the best node to explore next.
         current_node = NextNode();
 
-        //Check if the node selected is the goal.
+        // Check if the node selected is the goal.
         if(current_node->distance(m_Model.end_node) == 0) {
             std::vector<SearchModel::Node> path_found = CreatePathFound(current_node);
-            std::cout<<"Hooray for you!"<<std::endl;
-            std::cout<<"Distance: " << distance << " meters. \n";
+            std::cout << "Hooray for you!" << std::endl;
+            std::cout << "Distance: " << distance << " meters. \n";
             return path_found;
         }
         AddNeighbors(current_node);
@@ -36,14 +35,14 @@ std::vector<SearchModel::Node> Search::AStar(){
 }
 
 void Search::AddNeighbors(SearchModel::Node * current_node) {
-    //Expand the current node (add all unvisited neighbors to the open list)
+    // Expand the current node (add all unvisited neighbors to the open list)
     current_node->FindNeighbors();
 
     for (auto neighbor : current_node->neighbors) {
         neighbor->parent = current_node;
         neighbor->g_value = current_node->g_value + current_node->distance(*neighbor);
 
-        //Add the neighbor to the open list.
+        // Add the neighbor to the open list.
         open_list.emplace_back(neighbor);
         neighbor->visited = true;
     }
