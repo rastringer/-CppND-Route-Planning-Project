@@ -17,5 +17,5 @@ class Search {
  private:
     SearchModel &m_Model;
     float distance;
-    std::vector<SearchModel::Node *> open_list;
+    std::vector<SearchModel::Node*> open_list;
 };
