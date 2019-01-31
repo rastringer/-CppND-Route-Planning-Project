@@ -17,10 +17,9 @@ void Search::AStar() {
 
         // Check if the node selected is the goal.
         if(current_node->distance(m_Model.end_node) == 0) {
-            std::vector<SearchModel::Node> path_found = CreatePathFound(current_node);
+            m_Model.path = CreatePathFound(current_node);
             std::cout << "Hooray for you!" << std::endl;
             std::cout << "Distance: " << distance << " meters. \n";
-            m_Model.path = path_found;
         }
         AddNeighbors(current_node);
     }
