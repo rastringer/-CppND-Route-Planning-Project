@@ -8,7 +8,7 @@ void Search::AStar() {
     // Initialize open_list with starting node.
     m_Model.start_node.visited = true;
     open_list.emplace_back(&m_Model.start_node);
-    SearchModel::Node * current_node = nullptr;
+    SearchModel::Node *current_node = nullptr;
 
     // Expand nodes until you reach the goal. Use heuristic to prioritize what node to open first.
     while (open_list.size() > 0) {
@@ -28,7 +28,7 @@ void Search::AStar() {
     std::cout<<"Didn't find it!"<<std::endl;
 }
 
-void Search::AddNeighbors(SearchModel::Node * current_node) {
+void Search::AddNeighbors(SearchModel::Node *current_node) {
     // Expand the current node (add all unvisited neighbors to the open list)
     current_node->FindNeighbors();
 
@@ -42,17 +42,17 @@ void Search::AddNeighbors(SearchModel::Node * current_node) {
     }
 }
 
-SearchModel::Node * Search::NextNode() {
+SearchModel::Node *Search::NextNode() {
     std::sort(open_list.begin(), open_list.end(), [](const auto &_1st, const auto &_2nd) {
         return _1st->h_value + _1st->g_value < _2nd->h_value + _2nd->g_value;
     });
 
-    SearchModel::Node * lowest_node = open_list.front();
+    SearchModel::Node *lowest_node = open_list.front();
     open_list.erase(open_list.begin());
     return lowest_node;
 }
 
-std::vector<SearchModel::Node> Search::CreatePathFound(SearchModel::Node * current_node) {
+std::vector<SearchModel::Node> Search::CreatePathFound(SearchModel::Node *current_node) {
     // Create path_found vector
     distance = 0.0f;
     std::vector<SearchModel::Node> path_found;
