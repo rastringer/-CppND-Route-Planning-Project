@@ -20,6 +20,7 @@ void Search::AStar() {
             m_Model.path = CreatePathFound(current_node);
             std::cout << "Hooray for you!" << std::endl;
             std::cout << "Distance: " << distance << " meters. \n";
+            return;
         }
         AddNeighbors(current_node);
     }
