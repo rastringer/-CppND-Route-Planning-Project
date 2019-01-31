@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include <io2d.h>
-#include "model.h"
+#include "search_model.h"
 #include "render.h"
 #include "a_search.h"
 
@@ -51,6 +51,7 @@ int main(int argc, const char **argv)
     }
     
     // Get user input.
+
     float start_x, start_y, end_x, end_y;
     std::cout << "The map coordinates begin at (0,0) in the lower left corner, and end at (100, 100) in the upper right." << "\n";
     std::cout << "Enter a start x between 0 and 100: ";
@@ -62,10 +63,14 @@ int main(int argc, const char **argv)
     std::cout << "Enter an end y between 0 and 100: ";
     std::cin >> end_y;
     // Build Model.
-    Model model{osm_data, start_x, start_y, end_x, end_y};
+    SearchModel model{osm_data, start_x, start_y, end_x, end_y};
+
+    // For testing:
+    // SearchModel model{osm_data, 10, 10, 50, 50};
 
     // Perform search and render results.
     Search search{model};
+    search.AStar();
     Render render{model};
 
     auto display = io2d::output_surface{400, 400, io2d::format::argb32, io2d::scaling::none, io2d::refresh_style::fixed, 30};

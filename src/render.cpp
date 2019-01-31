@@ -6,7 +6,7 @@ static io2d::rgba_color RoadColor(Model::Road::Type type);
 static io2d::dashes RoadDashes(Model::Road::Type type);
 static io2d::point_2d ToPoint2D( const Model::Node &node ) noexcept; 
 
-Render::Render( Model &model ):
+Render::Render( SearchModel &model ):
     m_Model(model)
 {
     BuildRoadReps();
@@ -47,7 +47,7 @@ void Render::DrawEndPosition(io2d::output_surface &surface) const{
     auto pb = io2d::path_builder{}; 
     pb.matrix(m_Matrix);
 
-    pb.new_figure({m_Model.end_node.x, m_Model.end_node.y});
+    pb.new_figure({(float) m_Model.end_node.x, (float) m_Model.end_node.y});
     float constexpr l_marker = 0.01f;
     pb.rel_line({l_marker, 0.f});
     pb.rel_line({0.f, l_marker});
@@ -67,7 +67,7 @@ void Render::DrawStartPosition(io2d::output_surface &surface) const{
     auto pb = io2d::path_builder{}; 
     pb.matrix(m_Matrix);
 
-    pb.new_figure({m_Model.start_node.x, m_Model.start_node.y});
+    pb.new_figure({(float) m_Model.start_node.x, (float) m_Model.start_node.y});
     float constexpr l_marker = 0.01f;
     pb.rel_line({l_marker, 0.f});
     pb.rel_line({0.f, l_marker});

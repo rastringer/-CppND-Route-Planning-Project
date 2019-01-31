@@ -14,14 +14,14 @@ file(GLOB project_SRCS *.cpp *.h)
 add_executable(${project_BIN} ${project_SRCS})
 
 target_link_libraries(${project_BIN}
-    PRIVATE io2d
+    PRIVATE io2d::io2d
     PUBLIC pugixml
 )
 
 #
 # create a library for unit tests
 #
-add_library(a_search OBJECT a_search.cpp model.cpp)
+add_library(a_search OBJECT a_search.cpp model.cpp search_model.cpp)
 target_include_directories(a_search PRIVATE ../thirdparty/pugixml/src)
 
 
