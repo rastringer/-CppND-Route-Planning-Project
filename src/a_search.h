@@ -7,11 +7,11 @@
 
 class Search {
  public:
-    Search(SearchModel &model);
+    Search(SearchModel &model): m_Model(model) {}
     float GetDistance() const {return distance;}
     void AddNeighbors(SearchModel::Node * current_node);
     SearchModel::Node * NextNode();
-    std::vector<SearchModel::Node> AStar();
+    void AStar();
     std::vector<SearchModel::Node> CreatePathFound(SearchModel::Node *);
 
  private:

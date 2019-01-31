@@ -70,6 +70,7 @@ int main(int argc, const char **argv)
 
     // Perform search and render results.
     Search search{model};
+    search.AStar();
     Render render{model};
 
     auto display = io2d::output_surface{400, 400, io2d::format::argb32, io2d::scaling::none, io2d::refresh_style::fixed, 30};

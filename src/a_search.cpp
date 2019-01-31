@@ -4,12 +4,7 @@
 #include <set>
 
 
-Search::Search(SearchModel &model): m_Model(model) {
-    //Call A* algorithm
-    m_Model.path = AStar();
-}
-
-std::vector<SearchModel::Node> Search::AStar() {
+void Search::AStar() {
     // Initialize open_list with starting node.
     m_Model.start_node.visited = true;
     open_list.emplace_back(&m_Model.start_node);
@@ -25,13 +20,12 @@ std::vector<SearchModel::Node> Search::AStar() {
             std::vector<SearchModel::Node> path_found = CreatePathFound(current_node);
             std::cout << "Hooray for you!" << std::endl;
             std::cout << "Distance: " << distance << " meters. \n";
-            return path_found;
+            m_Model.path = path_found;
         }
         AddNeighbors(current_node);
     }
 
     std::cout<<"Didn't find it!"<<std::endl;
-    return {};
 }
 
 void Search::AddNeighbors(SearchModel::Node * current_node) {
