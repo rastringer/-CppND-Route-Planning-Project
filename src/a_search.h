@@ -13,7 +13,7 @@ class Search {
 
   private:
     void AddNeighbors(SearchModel::Node *current_node);
-    std::vector<SearchModel::Node> CreatePathFound(SearchModel::Node *);
+    std::vector<SearchModel::Node> ConstructFinalPath(SearchModel::Node *);
     SearchModel::Node *NextNode();
     SearchModel &m_Model;
     float distance;

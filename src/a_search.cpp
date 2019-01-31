@@ -13,19 +13,15 @@ void Search::AStar() {
     // Expand nodes until you reach the goal. Use heuristic to prioritize what node to open first.
     while (open_list.size() > 0) {
         // Select the best node to explore next.
-        current_node = NextNode();
-
+        current_node = NextNode(); 
         // Check if the node selected is the goal.
         if(current_node->distance(m_Model.end_node) == 0) {
-            m_Model.path = CreatePathFound(current_node);
-            std::cout << "Hooray for you!" << std::endl;
-            std::cout << "Distance: " << distance << " meters. \n";
+            // Set the model path variable with the path found.
+            m_Model.path = ConstructFinalPath(current_node);
             return;
         }
         AddNeighbors(current_node);
     }
-
-    std::cout<<"Didn't find it!"<<std::endl;
 }
 
 void Search::AddNeighbors(SearchModel::Node *current_node) {
@@ -52,7 +48,7 @@ SearchModel::Node *Search::NextNode() {
     return lowest_node;
 }
 
-std::vector<SearchModel::Node> Search::CreatePathFound(SearchModel::Node *current_node) {
+std::vector<SearchModel::Node> Search::ConstructFinalPath(SearchModel::Node *current_node) {
     // Create path_found vector
     distance = 0.0f;
     std::vector<SearchModel::Node> path_found;
