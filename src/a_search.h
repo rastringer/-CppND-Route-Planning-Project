@@ -10,7 +10,7 @@ class Search {
     Search(SearchModel &model): m_Model(model) {}
     float GetDistance() const {return distance;}
     void AddNeighbors(SearchModel::Node * current_node);
-    SearchModel::Node * NextNode();
+    SearchModel::Node *NextNode();
     void AStar();
     std::vector<SearchModel::Node> CreatePathFound(SearchModel::Node *);
 
