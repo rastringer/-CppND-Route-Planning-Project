@@ -26,8 +26,8 @@ void SearchModel::CreateNodeToRoadHashmap() {
 }
 
 
-SearchModel::Node * SearchModel::Node::FindNeighbor(std::vector<int> node_indices) {
-    Node * closest_node = nullptr;
+SearchModel::Node *SearchModel::Node::FindNeighbor(std::vector<int> node_indices) {
+    Node *closest_node = nullptr;
     Node node;
 
     for (int node_index : node_indices) {
@@ -44,7 +44,7 @@ SearchModel::Node * SearchModel::Node::FindNeighbor(std::vector<int> node_indice
 
 void SearchModel::Node::FindNeighbors() {
     for (auto & road : parent_model->node_to_road[this->index]) {
-        SearchModel::Node * new_neighbor = this->FindNeighbor(parent_model->Ways()[road->way].nodes);
+        SearchModel::Node *new_neighbor = this->FindNeighbor(parent_model->Ways()[road->way].nodes);
         if (new_neighbor) {
             this->neighbors.emplace_back(new_neighbor);
         }
@@ -52,7 +52,7 @@ void SearchModel::Node::FindNeighbors() {
 }
 
 
-SearchModel::Node & SearchModel::FindClosestNode(float x, float y) {
+SearchModel::Node &SearchModel::FindClosestNode(float x, float y) {
     Node input;
     input.x = x;
     input.y = y;
