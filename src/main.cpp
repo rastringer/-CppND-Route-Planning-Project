@@ -6,7 +6,7 @@
 #include <io2d.h>
 #include "search_model.h"
 #include "render.h"
-#include "a_search.h"
+#include "search.h"
 
 using namespace std::experimental;
 
@@ -63,13 +63,13 @@ int main(int argc, const char **argv)
     std::cout << "Enter an end y between 0 and 100: ";
     std::cin >> end_y;
     // Build Model.
-    SearchModel model{osm_data, start_x, start_y, end_x, end_y};
+    SearchModel model{osm_data};
 
     // For testing:
     // SearchModel model{osm_data, 10, 10, 50, 50};
 
     // Perform search and render results.
-    Search search{model};
+    Search search{model, start_x, start_y, end_x, end_y};
     search.AStar();
     std::cout << "Distance: " << search.GetDistance() << " meters. \n";
     Render render{model};
