@@ -1,24 +1,13 @@
 #include "search_model.h"
 #include <iostream>
 
-SearchModel::SearchModel(const std::vector<std::byte> &xml, float start_x, 
-    float start_y, float end_x, float end_y) : Model(xml) {
-    // Convert inputs to percentage:
-    start_x *= 0.01;
-    start_y *= 0.01;
-    end_x *= 0.01;
-    end_y *= 0.01;
-    
+SearchModel::SearchModel(const std::vector<std::byte> &xml) : Model(xml) {
     // Create SearchModel nodes.
     int counter = 0;
     for (Model::Node node : this->Nodes()) {
         m_Nodes.emplace_back(Node(counter, this, node));
         counter++;
     }
-
-    start_node = FindClosestNode(start_x, start_y);
-    end_node = FindClosestNode(end_x, end_y);
-    CalculateHValues();
     CreateNodeToRoadHashmap();
 }
 
@@ -59,15 +48,6 @@ void SearchModel::Node::FindNeighbors() {
         if (new_neighbor) {
             this->neighbors.emplace_back(new_neighbor);
         }
-    }
-}
-
-
-void SearchModel::CalculateHValues() {
-    float h_value;
-    for (auto &node: SNodes()) {
-        h_value = std::sqrt(std::pow((end_node.x - node.x),2)+ std::pow((end_node.y - node.y),2));
-        node.h_value = h_value;
     }
 }
 

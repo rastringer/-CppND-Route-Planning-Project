@@ -39,7 +39,7 @@ TEST(VerifyAStar, Distance) {
             osm_data = std::move(*data);
     }
     
-    SearchModel model{osm_data, 0, 0, 50, 50};  
-    Search search{model};
+    SearchModel model{osm_data};  
+    Search search{model, 0, 0, 50, 50};
     EXPECT_FLOAT_EQ(0.43332419, search.GetDistance());
 }

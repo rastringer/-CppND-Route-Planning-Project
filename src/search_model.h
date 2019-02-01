@@ -30,19 +30,13 @@ class SearchModel : public Model {
         SearchModel * parent_model = nullptr;
     };
 
-
-    SearchModel(const std::vector<std::byte> &xml, float start_x, float start_y, float end_x, float end_y);
-
+    SearchModel(const std::vector<std::byte> &xml);
+    Node &FindClosestNode(float x, float y);
     auto &SNodes() { return m_Nodes; }
-
-    Node start_node;
-    Node end_node;
     std::vector<Node> path;
     
   private:
-    void CalculateHValues();
     void CreateNodeToRoadHashmap();
-    Node &FindClosestNode(float x, float y);
     std::unordered_map<int, std::vector<const Model::Road *>> node_to_road;
     std::vector<Node> m_Nodes;
 };
