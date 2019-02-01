@@ -10,7 +10,6 @@ class SearchModel : public Model {
   public:
     class Node : public Model::Node {
       public:
-        int index;
         Node * parent = nullptr;
         float h_value = std::numeric_limits<float>::max();
         float g_value = 0.0;
@@ -26,6 +25,7 @@ class SearchModel : public Model {
         Node(int idx, SearchModel * search_model, Model::Node node) : Model::Node(node), parent_model(search_model) { index = idx; }
 
       private:
+        int index;
         Node * FindNeighbor(std::vector<int> node_indices);
         SearchModel * parent_model = nullptr;
     };

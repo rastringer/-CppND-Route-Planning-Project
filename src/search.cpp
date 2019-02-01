@@ -16,6 +16,7 @@ Search::Search(SearchModel &model, float start_x, float start_y, float end_x, fl
     CalculateHValues();
 }
 
+
 void Search::AStar() {
     // Initialize open_list with starting node.
     start_node->visited = true;
@@ -36,6 +37,7 @@ void Search::AStar() {
     }
 }
 
+
 void Search::AddNeighbors(SearchModel::Node *current_node) {
     // Expand the current node (add all unvisited neighbors to the open list)
     current_node->FindNeighbors();
@@ -50,6 +52,7 @@ void Search::AddNeighbors(SearchModel::Node *current_node) {
     }
 }
 
+
 SearchModel::Node *Search::NextNode() {
     std::sort(open_list.begin(), open_list.end(), [](const auto &_1st, const auto &_2nd) {
         return _1st->h_value + _1st->g_value < _2nd->h_value + _2nd->g_value;
@@ -60,6 +63,7 @@ SearchModel::Node *Search::NextNode() {
     return lowest_node;
 }
 
+
 void Search::CalculateHValues() {
     float h_value;
     for (auto &node: m_Model.SNodes()) {
@@ -67,6 +71,7 @@ void Search::CalculateHValues() {
         node.h_value = h_value;
     }
 }
+
 
 std::vector<SearchModel::Node> Search::ConstructFinalPath(SearchModel::Node *current_node) {
     // Create path_found vector
