@@ -21,8 +21,8 @@ target_link_libraries(${project_BIN}
 #
 # create a library for unit tests
 #
-add_library(a_search OBJECT a_search.cpp model.cpp search_model.cpp)
-target_include_directories(a_search PRIVATE ../thirdparty/pugixml/src)
+add_library(search OBJECT search.cpp model.cpp search_model.cpp)
+target_include_directories(search PRIVATE ../thirdparty/pugixml/src)
 
 
 if( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )

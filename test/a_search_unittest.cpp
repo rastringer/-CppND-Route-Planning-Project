@@ -4,7 +4,7 @@
 #include <optional>
 #include <vector>
 #include "../src/search_model.h"
-#include "../src/a_search.h"
+#include "../src/search.h"
 
 // TODO: factor this out of main.cpp so we can re-use
 static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)

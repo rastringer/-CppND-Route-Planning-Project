@@ -6,7 +6,7 @@
 #include <io2d.h>
 #include "search_model.h"
 #include "render.h"
-#include "a_search.h"
+#include "search.h"
 
 using namespace std::experimental;
 
