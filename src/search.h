@@ -17,8 +17,8 @@ class Search {
     std::vector<SearchModel::Node> ConstructFinalPath(SearchModel::Node *);
     SearchModel::Node *NextNode();
     SearchModel &m_Model;
-    SearchModel::Node * start_node;
-    SearchModel::Node * end_node;
+    SearchModel::Node *start_node;
+    SearchModel::Node *end_node;
     float distance;
     std::vector<SearchModel::Node*> open_list;
 };
