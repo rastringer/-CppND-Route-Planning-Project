@@ -3,8 +3,8 @@
 #include <iostream>
 #include <optional>
 #include <vector>
-#include "../src/search_model.h"
-#include "../src/search.h"
+#include "../src/route_model.h"
+#include "../src/route_planner.h"
 
 // TODO: factor this out of main.cpp so we can re-use
 static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
@@ -39,7 +39,7 @@ TEST(VerifyAStar, Distance) {
             osm_data = std::move(*data);
     }
     
-    SearchModel model{osm_data};  
-    Search search{model, 0, 0, 50, 50};
-    EXPECT_FLOAT_EQ(0.43332419, search.GetDistance());
+    RouteModel model{osm_data};  
+    RoutePlanner route_planner{model, 0, 0, 50, 50};
+    EXPECT_FLOAT_EQ(0.43332419, route_planner.GetDistance());
 }

@@ -2,14 +2,14 @@
 
 #include <unordered_map>
 #include <io2d.h>
-#include "search_model.h"
+#include "route_model.h"
 
 using namespace std::experimental;
 
 class Render
 {
 public:
-    Render(SearchModel &model );
+    Render(RouteModel &model );
     void Display( io2d::output_surface &surface );
     
 private:
@@ -30,7 +30,7 @@ private:
     io2d::interpreted_path PathLine() const;
 
     
-    SearchModel &m_Model;
+    RouteModel &m_Model;
     float m_Scale = 1.f;
     float m_PixelsInMeter = 1.f;
     io2d::matrix_2d m_Matrix;

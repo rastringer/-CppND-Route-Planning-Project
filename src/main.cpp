@@ -4,9 +4,9 @@
 #include <vector>
 #include <string>
 #include <io2d.h>
-#include "search_model.h"
+#include "route_model.h"
 #include "render.h"
-#include "search.h"
+#include "route_planner.h"
 
 using namespace std::experimental;
 
@@ -63,15 +63,15 @@ int main(int argc, const char **argv)
     std::cout << "Enter an end y between 0 and 100: ";
     std::cin >> end_y;
     // Build Model.
-    SearchModel model{osm_data};
+    RouteModel model{osm_data};
 
     // For testing:
-    // SearchModel model{osm_data, 10, 10, 50, 50};
+    // RouteModel model{osm_data, 10, 10, 50, 50};
 
     // Perform search and render results.
-    Search search{model, start_x, start_y, end_x, end_y};
-    search.AStar();
-    std::cout << "Distance: " << search.GetDistance() << " meters. \n";
+    RoutePlanner route_planner{model, start_x, start_y, end_x, end_y};
+    route_planner.AStarSearch();
+    std::cout << "Distance: " << route_planner.GetDistance() << " meters. \n";
     Render render{model};
 
     auto display = io2d::output_surface{400, 400, io2d::format::argb32, io2d::scaling::none, io2d::refresh_style::fixed, 30};

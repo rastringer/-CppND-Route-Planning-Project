@@ -1,8 +1,8 @@
-#include "search_model.h"
+#include "route_model.h"
 #include <iostream>
 
-SearchModel::SearchModel(const std::vector<std::byte> &xml) : Model(xml) {
-    // Create SearchModel nodes.
+RouteModel::RouteModel(const std::vector<std::byte> &xml) : Model(xml) {
+    // Create RouteModel nodes.
     int counter = 0;
     for (Model::Node node : this->Nodes()) {
         m_Nodes.emplace_back(Node(counter, this, node));
@@ -12,8 +12,8 @@ SearchModel::SearchModel(const std::vector<std::byte> &xml) : Model(xml) {
 }
 
 
-void SearchModel::CreateNodeToRoadHashmap() {
-    for (const Model::Road & road : Roads()) {
+void RouteModel::CreateNodeToRoadHashmap() {
+    for (const Model::Road &road : Roads()) {
         if (road.type != Model::Road::Type::Footway) {
             for (int node_idx : Ways()[road.way].nodes) {
                 if (node_to_road.find(node_idx) == node_to_road.end()) {
@@ -26,8 +26,8 @@ void SearchModel::CreateNodeToRoadHashmap() {
 }
 
 
-SearchModel::Node * SearchModel::Node::FindNeighbor(std::vector<int> node_indices) {
-    Node * closest_node = nullptr;
+RouteModel::Node *RouteModel::Node::FindNeighbor(std::vector<int> node_indices) {
+    Node *closest_node = nullptr;
     Node node;
 
     for (int node_index : node_indices) {
@@ -42,9 +42,9 @@ SearchModel::Node * SearchModel::Node::FindNeighbor(std::vector<int> node_indice
 }
 
 
-void SearchModel::Node::FindNeighbors() {
+void RouteModel::Node::FindNeighbors() {
     for (auto & road : parent_model->node_to_road[this->index]) {
-        SearchModel::Node * new_neighbor = this->FindNeighbor(parent_model->Ways()[road->way].nodes);
+        RouteModel::Node *new_neighbor = this->FindNeighbor(parent_model->Ways()[road->way].nodes);
         if (new_neighbor) {
             this->neighbors.emplace_back(new_neighbor);
         }
@@ -52,7 +52,7 @@ void SearchModel::Node::FindNeighbors() {
 }
 
 
-SearchModel::Node & SearchModel::FindClosestNode(float x, float y) {
+RouteModel::Node &RouteModel::FindClosestNode(float x, float y) {
     Node input;
     input.x = x;
     input.y = y;

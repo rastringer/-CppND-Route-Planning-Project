@@ -1,10 +1,9 @@
-#include "search.h"
+#include "route_planner.h"
 #include <cmath>
 #include <algorithm>
 #include <set>
 
-
-Search::Search(SearchModel &model, float start_x, float start_y, float end_x, float end_y): m_Model(model) {
+RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, float end_x, float end_y): m_Model(model) {
     // Convert inputs to percentage:
     start_x *= 0.01;
     start_y *= 0.01;
@@ -13,15 +12,15 @@ Search::Search(SearchModel &model, float start_x, float start_y, float end_x, fl
 
     start_node = &m_Model.FindClosestNode(start_x, start_y);
     end_node = &m_Model.FindClosestNode(end_x, end_y);
-    CalculateHValues();
 }
 
 
-void Search::AStar() {
+void RoutePlanner::AStarSearch() {
     // Initialize open_list with starting node.
+    CalculateHValues();
     start_node->visited = true;
     open_list.emplace_back(start_node);
-    SearchModel::Node *current_node = nullptr;
+    RouteModel::Node *current_node = nullptr;
 
     // Expand nodes until you reach the goal. Use heuristic to prioritize what node to open first.
     while (open_list.size() > 0) {
@@ -38,7 +37,7 @@ void Search::AStar() {
 }
 
 
-void Search::AddNeighbors(SearchModel::Node *current_node) {
+void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
     // Expand the current node (add all unvisited neighbors to the open list)
     current_node->FindNeighbors();
 
@@ -53,18 +52,18 @@ void Search::AddNeighbors(SearchModel::Node *current_node) {
 }
 
 
-SearchModel::Node *Search::NextNode() {
+RouteModel::Node *RoutePlanner::NextNode() {
     std::sort(open_list.begin(), open_list.end(), [](const auto &_1st, const auto &_2nd) {
         return _1st->h_value + _1st->g_value < _2nd->h_value + _2nd->g_value;
     });
 
-    SearchModel::Node *lowest_node = open_list.front();
+    RouteModel::Node *lowest_node = open_list.front();
     open_list.erase(open_list.begin());
     return lowest_node;
 }
 
 
-void Search::CalculateHValues() {
+void RoutePlanner::CalculateHValues() {
     float h_value;
     for (auto &node: m_Model.SNodes()) {
         h_value = std::sqrt(std::pow((end_node->x - node.x), 2)+ std::pow((end_node->y - node.y), 2));
@@ -73,11 +72,11 @@ void Search::CalculateHValues() {
 }
 
 
-std::vector<SearchModel::Node> Search::ConstructFinalPath(SearchModel::Node *current_node) {
+std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node *current_node) {
     // Create path_found vector
     distance = 0.0f;
-    std::vector<SearchModel::Node> path_found;
-    SearchModel::Node parent;
+    std::vector<RouteModel::Node> path_found;
+    RouteModel::Node parent;
 
     while (current_node->parent != nullptr) {
         path_found.push_back(*current_node);

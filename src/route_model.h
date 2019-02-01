@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include "model.h"
 
-class SearchModel : public Model {
+class RouteModel : public Model {
 
   public:
     class Node : public Model::Node {
@@ -22,15 +22,15 @@ class SearchModel : public Model {
         }
 
         Node(){}
-        Node(int idx, SearchModel * search_model, Model::Node node) : Model::Node(node), parent_model(search_model) { index = idx; }
+        Node(int idx, RouteModel * search_model, Model::Node node) : Model::Node(node), parent_model(search_model) { index = idx; }
 
       private:
         int index;
         Node * FindNeighbor(std::vector<int> node_indices);
-        SearchModel * parent_model = nullptr;
+        RouteModel * parent_model = nullptr;
     };
 
-    SearchModel(const std::vector<std::byte> &xml);
+    RouteModel(const std::vector<std::byte> &xml);
     Node &FindClosestNode(float x, float y);
     auto &SNodes() { return m_Nodes; }
     std::vector<Node> path;
