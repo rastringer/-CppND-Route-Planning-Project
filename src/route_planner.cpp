@@ -17,7 +17,6 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 
 void RoutePlanner::AStarSearch() {
     // Initialize open_list with starting node.
-    CalculateHValues();
     start_node->visited = true;
     open_list.emplace_back(start_node);
     RouteModel::Node *current_node = nullptr;
@@ -44,6 +43,7 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
     for (auto neighbor : current_node->neighbors) {
         neighbor->parent = current_node;
         neighbor->g_value = current_node->g_value + current_node->distance(*neighbor);
+        neighbor->h_value = CalculateHValue(neighbor);
 
         // Add the neighbor to the open list.
         open_list.emplace_back(neighbor);
@@ -63,12 +63,8 @@ RouteModel::Node *RoutePlanner::NextNode() {
 }
 
 
-void RoutePlanner::CalculateHValues() {
-    float h_value;
-    for (auto &node: m_Model.SNodes()) {
-        h_value = std::sqrt(std::pow((end_node->x - node.x), 2)+ std::pow((end_node->y - node.y), 2));
-        node.h_value = h_value;
-    }
+float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
+    return std::sqrt(std::pow((end_node->x - node->x), 2)+ std::pow((end_node->y - node->y), 2));
 }
 
 
