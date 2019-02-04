@@ -18,7 +18,7 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 void RoutePlanner::AStarSearch() {
     // Initialize open_list with starting node.
     start_node->visited = true;
-    open_list.emplace_back(start_node);
+    open_list.push_back(start_node);
     RouteModel::Node *current_node = nullptr;
 
     // Expand nodes until you reach the goal. Use heuristic to prioritize what node to open first.
