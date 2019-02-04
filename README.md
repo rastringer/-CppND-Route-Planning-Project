@@ -1,3 +1,5 @@
+In this exercise, modify `main.cpp` to get floats `start_x`, `start_y`, `end_x`, and `end_y` from the user and pass the inputs to the `RoutePlanner`. Each of these inputs should be in the range 0 to 100. 
+
 ### Dependencies in Linux
 1. g++7: sudo apt-get install gcc-7 g++-7
 2. CMake 3.8 or higher:  (https://cmake.org/install/) 

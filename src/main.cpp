@@ -50,26 +50,15 @@ int main(int argc, const char **argv)
             osm_data = std::move(*data);
     }
     
-    // Get user input.
+    // TODO: Declare floats `start_x`, `start_y`, `end_x`, and `end_y` and get
+    // user input for these values using std::cin. Pass the user input to the
+    // RoutePlanner object below.
 
-    float start_x, start_y, end_x, end_y;
-    std::cout << "The map coordinates begin at (0,0) in the lower left corner, and end at (100, 100) in the upper right." << "\n";
-    std::cout << "Enter a start x between 0 and 100: ";
-    std::cin >> start_x;
-    std::cout << "Enter a start y betwen 0 and 100: ";
-    std::cin >> start_y;
-    std::cout << "Enter an end x between 0 and 100: ";
-    std::cin >> end_x;
-    std::cout << "Enter an end y between 0 and 100: ";
-    std::cin >> end_y;
     // Build Model.
     RouteModel model{osm_data};
 
-    // For testing:
-    // RouteModel model{osm_data, 10, 10, 50, 50};
-
     // Perform search and render results.
-    RoutePlanner route_planner{model, start_x, start_y, end_x, end_y};
+    RoutePlanner route_planner{model, 10, 10, 50, 50};
     route_planner.AStarSearch();
     std::cout << "Distance: " << route_planner.GetDistance() << " meters. \n";
     Render render{model};
