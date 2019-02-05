@@ -64,7 +64,7 @@ RouteModel::Node *RoutePlanner::NextNode() {
 
 
 float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
-    return std::sqrt(std::pow((end_node->x - node->x), 2)+ std::pow((end_node->y - node->y), 2));
+    return node->distance(*end_node);
 }
 
 
