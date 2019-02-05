@@ -22,22 +22,6 @@ void RoutePlanner::AStarSearch() {
 }
 
 
-void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
-    // Expand the current node (add all unvisited neighbors to the open list)
-    current_node->FindNeighbors();
-
-    for (auto neighbor : current_node->neighbors) {
-        neighbor->parent = current_node;
-        neighbor->g_value = current_node->g_value + current_node->distance(*neighbor);
-        neighbor->h_value = CalculateHValue(neighbor);
-
-        // Add the neighbor to the open list.
-        open_list.push_back(neighbor);
-        neighbor->visited = true;
-    }
-}
-
-
 RouteModel::Node *RoutePlanner::NextNode() {
     std::sort(open_list.begin(), open_list.end(), [](const auto &_1st, const auto &_2nd) {
         return _1st->h_value + _1st->g_value < _2nd->h_value + _2nd->g_value;
