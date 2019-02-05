@@ -8,3 +8,7 @@ To complete this exercise:
   2. Create a pointer copy of the pointer to the node with the lowest f-value.
   3. Erase that node pointer from `open_list`.
   4. Return the pointer copy.
+
+float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
+    return node->distance(*end_node);
+}
