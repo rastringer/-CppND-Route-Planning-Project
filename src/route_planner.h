@@ -11,7 +11,6 @@ class RoutePlanner {
     void AStarSearch();
 
   private:
-    float CalculateHValue(RouteModel::Node const *node);
     std::vector<RouteModel::Node> ConstructFinalPath(RouteModel::Node *);
     RouteModel &m_Model;
     RouteModel::Node *start_node;

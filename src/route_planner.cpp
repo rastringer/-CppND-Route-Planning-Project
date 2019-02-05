@@ -20,11 +20,6 @@ void RoutePlanner::AStarSearch() {
 }
 
 
-float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
-    return node->distance(*end_node);
-}
-
-
 std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node *current_node) {
     // Create path_found vector
     distance = 0.0f;

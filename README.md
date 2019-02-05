@@ -1,14 +1,6 @@
-In this exercise, you will will write a `RoutePlanner::NextNode` method which will sort the list of open nodes in the A\* search, and return the node with the lowest f-value. As you continue to develop your project, it will be easier to store the open list in the class as a vector of pointers to `RouteModel::Node` objects, so you will do that in this exercise as well.
+In this exercise, you will modify `route_planner.h` and `route_planner.cpp` to add a method `CalculateHValue`, which calculates the h-value for a given node. In this project, h-value will be computed as the distance from the node to the end_node.
 
-To complete this exercise:
-1. In the `RoutePlanner` class in `route_planner.h`, add a private class member variable `open_list`. The `open_list` should be a vector of `RouteModel::Node` pointers.  
-2. Modify `route_planner.h` to include a private function declaration for the `AddNeighbors` method. Since the method is just modifying the variable `open_list` and returning a pointer to a node, `AddNeighbors` does not need any arguments. The method should return a pointer to a `RouteModel::Node` object.
-3. In `route_planner.cpp` define the `NextNode` method. This method should:
-  1. Sort the `open_list` according to the f-value, which is the sum of a node's h-value and g-value. 
-  2. Create a pointer copy of the pointer to the node with the lowest f-value.
-  3. Erase that node pointer from `open_list`.
-  4. Return the pointer copy.
 
-float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
-    return node->distance(*end_node);
-}
+To write this method, you can use the following steps:
+1. Add a `CalculateHValue` declaration to the `RoutePlanner` class in `route_planner.h`. This method will only be used in the `RoutePlanner` class, so it can be a private method. `CalculateHValue` should accept a `const` pointer to a `RouteModel::Node` object, and it should return a `float`.
+2. In `route_planner.cpp` define the `CalculateHValue` method. The method should return the distance from the passed argument to the `end_node`.
