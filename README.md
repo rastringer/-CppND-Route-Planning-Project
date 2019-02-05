@@ -1,22 +1,23 @@
-In this exercise, complete `AStarSearch()` in `route_planner.cpp` using the `NextNode`, `ConstructFinalPath`, and `AddNeighbors` methods you have written previously.
+In this exercise, you will complete `AStarSearch()` in `route_planner.cpp` using the `NextNode`, `ConstructFinalPath`, and `AddNeighbors` methods you have written previously.
 
-### Dependencies in Linux
-1. g++7: sudo apt-get install gcc-7 g++-7
-2. CMake 3.8 or higher:  (https://cmake.org/install/) 
-3. Cairo: sudo apt-get install libcairo2-dev
-4. graphicsmagick: sudo apt-get install libgraphicsmagick1-dev
-5. libpng: sudo apt-get install libpng-dev
+To complete this exercise:
+1. Delete the current contents of `AStarSearch`.
+2. Use the `NextNode`, `ConstructFinalPath` and `AddNeighbors` methods to implement the pseudocode below in `AStarSearch`:
 
-### How to run with CMake
-
-```
-export CXX=g++-7
-git clone --recurse-submodules https://github.com/udacity/CppND-Route-Planning-Solution.git
-cd CppND-Route-Planning-Solution
-mkdir build 
-cd build
-cmake ..
-make
-../bin/test
-../bin/CppND-Route-Planning-Solution -f ../map.osm
+>AStarSearch:
+>
+>1. Set `start_node->visited` to be `true`.
+> 
+>2. Push `start_node` to the back of `open_list`.
+>  
+>3. Create a pointer `RouteModel::Node *current_node` and initialize the pointer to `nullptr`.
+>
+>4. **while** the `open_list` size is greater than 0:
+>    
+>  1. Set the `current_node` pointer to the results of calling `NextNode`.
+>  2. **if** the distance from `current_node` to the `end_node` is 0:
+    - Call `ConstructFinalPath` using `current_node` and set `m_Model.path` with the results.
+    - Return to exit the A\* search.
+>    
+>  4. **else** call `AddNeighbors` with the `current_node`./CppND-Route-Planning-Solution -f ../map.osm
 ````
