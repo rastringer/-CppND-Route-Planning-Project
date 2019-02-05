@@ -1,14 +1,10 @@
-In this exercise, you will will write a `RoutePlanner::AddNeighbors` method to take each neighbor of the current node in the A\* search, set the neighbor's g-value, h-value, and parent, and add the neighbor to the open list. To do this, you will use the `RouteModel::Node::FindNeighbors()`, and the `CalculateHValue` method that you have written previously.
+In this exercise, you will will write a `RoutePlanner::NextNode` method which will sort the list of open nodes in the A\* search, and return the node with the lowest f-value. As you continue to develop your project, it will be easier to store the open list in the class as a vector of pointers to `RouteModel::Node` objects, so you will do that in this exercise as well.
 
 To complete this exercise:
-1. Modify `route_planner.h` to include a function declaration for the `AddNeighbors` method. This method should accept a pointer to a `RouteModel::Node` object as the argument, and since the method is just modifying the `RoutePlanner` instance variable `open_list`, the method can have `void` return type. 
-2. In `route_planner.cpp` define the `AddNeighbors` method using the `FindNeighbors` and `CalculateHValue` methods. You can use the pseudocode below as a guideline:
-
-> AddNeighbors(RouteModel::Node *current_node)
-> 1. Call `FindNeighbors()` on `current_node` to populate the `current_node`'s `neighbors` vector.
-> 2. For each `neighbor` in the `current_node`'s `neighbors`
->   1. Set the `neighbor`s `parent` to the `current_node`.
->   2. Set the `neighbor`'s `g_value` to the sum of the `current_node`'s `g_value` plus the distance from the `curent_node` to the `neighbor`.
->   3. Set the `neighbor`'s `h_value` using `CalculateHValue`
->   4. Push the `neighbor` to the back of the `open_list`.
->   5. Mark the `neighbor` as visited.
+1. In the `RoutePlanner` class in `route_planner.h`, add a private class member variable `open_list`. The `open_list` should be a vector of `RouteModel::Node` pointers.  
+2. Modify `route_planner.h` to include a private function declaration for the `AddNeighbors` method. Since the method is just modifying the variable `open_list` and returning a pointer to a node, `AddNeighbors` does not need any arguments. The method should return a pointer to a `RouteModel::Node` object.
+3. In `route_planner.cpp` define the `NextNode` method. This method should:
+  1. Sort the `open_list` according to the f-value, which is the sum of a node's h-value and g-value. 
+  2. Create a pointer copy of the pointer to the node with the lowest f-value.
+  3. Erase that node pointer from `open_list`.
+  4. Return the pointer copy.

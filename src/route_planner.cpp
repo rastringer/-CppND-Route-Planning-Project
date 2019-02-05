@@ -20,17 +20,6 @@ void RoutePlanner::AStarSearch() {
 }
 
 
-RouteModel::Node *RoutePlanner::NextNode() {
-    std::sort(open_list.begin(), open_list.end(), [](const auto &_1st, const auto &_2nd) {
-        return _1st->h_value + _1st->g_value < _2nd->h_value + _2nd->g_value;
-    });
-
-    RouteModel::Node *lowest_node = open_list.front();
-    open_list.erase(open_list.begin());
-    return lowest_node;
-}
-
-
 float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
     return node->distance(*end_node);
 }
