@@ -10,7 +10,6 @@ class RoutePlanner {
     float GetDistance() const {return distance;}
 
   private:
-    std::vector<RouteModel::Node> ConstructFinalPath(RouteModel::Node *);
     RouteModel &m_Model;
     RouteModel::Node *start_node;
     RouteModel::Node *end_node;
