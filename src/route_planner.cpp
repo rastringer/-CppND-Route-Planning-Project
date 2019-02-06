@@ -13,13 +13,6 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 }
 
 
-void RoutePlanner::AStarSearch() {
-    end_node->parent = start_node;
-    m_Model.path = ConstructFinalPath(end_node);
-    return;
-}
-
-
 std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node *current_node) {
     // Create path_found vector
     distance = 0.0f;

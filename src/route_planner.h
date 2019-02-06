@@ -8,7 +8,6 @@ class RoutePlanner {
   public:
     RoutePlanner(RouteModel &model, float start_x, float start_y, float end_x, float end_y);
     float GetDistance() const {return distance;}
-    void AStarSearch();
 
   private:
     std::vector<RouteModel::Node> ConstructFinalPath(RouteModel::Node *);
