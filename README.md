@@ -9,3 +9,5 @@ To complete this exercise, you can use the following steps:
   3. To keep track of the total path distance, in each step of the iteration, add the distance between a node and its parent to the `distance` variable. 
   4. After the loop, scale the `distance` by multiplying by the model's scale: `m_Model.MetricScale()`. This is done since node coordinates are scaled down when they are stored in the model. They must be rescaled to get an accurate distance.
   5. Return the `path_found`.
+
+Note that this exercise has no tests. The `ConstructFinalPath` method will be tested in upcoming exercises as the A\* search methods are implemented.
