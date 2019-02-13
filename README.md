@@ -42,3 +42,6 @@ Exercises with tests will specify which string to pass with `-DTESTING`, but a t
 | Create Road to Node Hashmap |       "NodeToRoad"       |
 | Write FindNeighbors         |      "FindNeighbors"     |
 | Find the Closest Node       |       "FindClosest"      |
+| Write the A\* Search Stub   |        "AStarStub"       |
+| Finish A\* Search           |       "AStarSearch"      |
+
