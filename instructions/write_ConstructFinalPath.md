@@ -10,4 +10,6 @@ To complete this exercise, you can use the following steps:
   4. After the loop, scale the `distance` by multiplying by the model's scale: `m_Model.MetricScale()`. This is done since node coordinates are scaled down when they are stored in the model. They must be rescaled to get an accurate distance.
   5. Return the `path_found`.
 
+Note that the path returned above is in reverse order, with the ending node at the beginning of the vector. This is fine, and is expected by the rendering code.
+
 Note that this exercise has no tests. The `ConstructFinalPath` method will be tested in upcoming exercises as the A\* search methods are implemented.
