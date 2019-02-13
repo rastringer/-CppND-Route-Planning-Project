@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -7,11 +9,8 @@
 class RoutePlanner {
   public:
     RoutePlanner(RouteModel &model, float start_x, float start_y, float end_x, float end_y);
-    float GetDistance() const {return distance;}
+    // Add public variables or methods declarations here.
 
   private:
-    RouteModel &m_Model;
-    RouteModel::Node *start_node;
-    RouteModel::Node *end_node;
-    float distance;
+    // Add private variables or methods declarations here.
 };
