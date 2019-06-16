@@ -1,3 +1,31 @@
+## Route planner using A* search
+
+[//]: # (Image References)
+
+[image1]: example1.PNG "Route example"
+
+![alt text][image1]
+
+A* search selects a path between multiple nodes by finding a route with the smallest cost in distance travelled and time from a start to a finish node. For more on the algorithm, please see [here](https://en.wikipedia.org/wiki/A*_search_algorithm).
+
+## Running on your local machine
+
+This project runs best (easiest!) on Ubuntu. If you'd like to build on Mac or Windows, please e-mail me for guidance. 
+
+On Linux, cd into the build directory and run:
+```
+cmake ..
+make 
+```
+
+Once the build is complete, the executable files will be in the build folder. From the build directory, you can run the compiled executable with the OpenStreetMap data by entering the following command:
+
+```
+../bin/CppND-Route-Planning-Project -f ../map.osm
+```
+
+
+
 ## Testing
 
 For exercises that have unit tests, the project must be built with the approprate test cpp file. This can be done by using `cmake_tests` instead of `cmake`. For example, from the build directory:
