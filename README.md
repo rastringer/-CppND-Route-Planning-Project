@@ -1,10 +1,6 @@
 ## Route planner using A* search
 
-[//]: # (Image References)
-
-[image1]: example1.PNG "Route example"
-
-![alt text][image1]
+<img src="example1.PNG" width="500" height="500" />
 
 A* search selects a path between multiple nodes by finding a route with the smallest cost in distance travelled and time from a start to a finish node. For more on the algorithm, please see [here](https://en.wikipedia.org/wiki/A*_search_algorithm).
 
